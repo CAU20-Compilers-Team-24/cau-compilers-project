@@ -18,8 +18,7 @@ public class Main {
 
 
 	public static void main(String[] args) {
-		// printTable();
-		
+
 		// Symbol Table
 		SymbolTable symtab = new SymbolTable();
 
@@ -28,7 +27,7 @@ public class Main {
 				
 		try {
 			// Create file object
-			File file = new File("D:\\dev\\eclipse-workspace-cau\\CAU20CompilersTermProject1\\input-files\\input.txt");
+			File file = new File("input-files\\input.txt");
 			// Create input stream
 			FileReader filereader = new FileReader(file);
 			
@@ -42,16 +41,14 @@ public class Main {
 				System.out.println("------ " + readCharNum + "th character ------");
 				
 				// Convert character to string
-				String readString = Character.toString((char) ch);
+				String readCharStr = Character.toString((char) ch);
 
 				// Debug print
 				System.out.println("inputBuffer: " + inputBuffer);
 				System.out.println("Character read: \'" + Character.toString((char) ch) + "\'");
 				
-				boolean isWhitespace = Token.isWhitespace(readString);
-				
 				// If the read character is whitespace (\r, \t, \n)
-				if (isWhitespace) {
+				if (Token.isWhitespace(readCharStr)) {
 					System.out.println("Character read is a whitespace character.");
 					
 					// If input string is not empty, save the buffer content as token
@@ -65,14 +62,14 @@ public class Main {
 				}
 
 				// If the read character belongs to any of the delimiters
-				if (readString.matches(Token.delimiterPattern)) {
+				if (Token.isDelimiter(readCharStr)) {
 					System.out.println("Character read is a delimiter character.");
 					
 					// If input string is not empty, save the buffer content as token
 					if (inputBuffer.isEmpty() == false) {
 						symtab.put(inputBuffer);
 					}
-					symtab.putToken(new Token("ID", readString));
+					symtab.put(readCharStr);
 					
 					// Clear the string buffer and read next character
 					inputBuffer = "";

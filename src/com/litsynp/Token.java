@@ -12,8 +12,8 @@ public class Token {
 	// Predefined token patterns
 	private static String delimiterPattern = "[\\s\\(\\)\\{\\};,]";
 
-	private static String digitPattern = "[0..9]";
-	private static String signedIconstPattern = "0|(-|)([1..9][0..9]*)";
+	private static String digitPattern = "[0-9]";
+	private static String signedIconstPattern = "0|(-|)([1-9][0-9]*)";
 	private static String fconstPattern = "(-|)(0|[1-9][0-9]*)\\.(0|[0-9]*[1-9])";
 
 	private static String variableTypePattern = "int|char|bool|float";

@@ -15,7 +15,12 @@ public class Token {
 	private static String digitPattern = "[0-9]";
 	private static String signedIconstPattern = "0|(-|)([1-9][0-9]*)";
 	private static String fconstPattern = "(-|)(0|[1-9][0-9]*)\\.(0|[0-9]*[1-9])";
-
+	private static String literalStringPattern = "\"[^\"]*\"";
+	
+	private static String arithmeticPattern = "[+]|[-]|[*]|[/]";
+	private static String bitwisePattern = "<<|>>|[&]|[|]";
+	private static String comparisonPattern = "<|>|==|!=|<=|>=";
+	
 	private static String variableTypePattern = "int|char|bool|float";
 	private static String statementPattern = "if|else|while|for|return";
 	private static String booleanStringPattern = "true|false";
@@ -25,6 +30,7 @@ public class Token {
 	
 	// Returns true if a given string matches with one whitespace character
 	public static boolean isDelimiter(String input) {
+		// TODO: Add operators
 		pattern = Pattern.compile(delimiterPattern);
 		match = pattern.matcher(input);
 
@@ -71,6 +77,35 @@ public class Token {
 			return "FCONST";
 		}
 		
+		pattern = Pattern.compile(literalStringPattern);
+		match = pattern.matcher(tokenCandidate);
+		if (match.matches()) {
+			return "LITERAL_STRING";
+		}
+		
+		// Check for operators
+		pattern = Pattern.compile(arithmeticPattern);
+		match = pattern.matcher(tokenCandidate);
+		if (match.matches()) {
+			return "ARITHMETIC_OPERATOR";
+		}
+		
+		pattern = Pattern.compile(bitwisePattern);
+		match = pattern.matcher(tokenCandidate);
+		if (match.matches()) {
+			return "BITWISE_OPERATOR";
+		}
+		
+		pattern = Pattern.compile(comparisonPattern);
+		match = pattern.matcher(tokenCandidate);
+		if (match.matches()) {
+			return "COMP_OPERATOR";
+		}
+		
+		if (tokenCandidate.equals("=")) {
+			return "ASSIGN";
+		}
+		
 		// Check for delimiters
 		if (tokenCandidate.equals("(")) {
 			return "LPAREN";
@@ -96,13 +131,14 @@ public class Token {
 			return "SEMI";
 		}
 
-		// "NONE" means not to put in the symbol table
+		// "WHITESPACE" is not put in the symbol table
 		pattern = Pattern.compile("\\s");
 		match = pattern.matcher(tokenCandidate);
 		if (match.matches()) {
-			return "NONE";
+			return "WHITESPACE";
 		}
-		
+
+		// "NONE" means to print errors
 		return "NONE";
 	}
 

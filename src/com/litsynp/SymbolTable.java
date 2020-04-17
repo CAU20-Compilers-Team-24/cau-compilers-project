@@ -25,7 +25,7 @@ public class SymbolTable {
 		
 		// Determine if the string matches any of the predefined regex patterns
 		String tokenName = Token.getTokenName(input);
-		if (tokenName.equals("NONE") == false) {
+		if (tokenName.equals("WHITESPACE") == false && tokenName.equals("NONE") == false) {
 			this.putToken(new Token(tokenName, input));
 		}
 	}

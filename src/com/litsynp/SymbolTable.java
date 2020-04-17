@@ -18,6 +18,11 @@ public class SymbolTable {
 	// Determine if the input string belongs to any token pattern, and put in the table if it is
 	// If not, the input is not put in the table
 	public void put(String input) {
+		// If the input string is empty, return without putting in the symbol table
+		if (input.isEmpty()) {
+			return;
+		}
+		
 		// Determine if the string matches any of the predefined regex patterns
 		String tokenName = Token.getTokenName(input);
 		if (tokenName.equals("NONE") == false) {

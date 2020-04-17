@@ -10,33 +10,20 @@ public class Token {
 	private String value;
 
 	// Predefined token patterns
-	public static String whitespacePattern = "\\s";
-
-	private static String delimiterPattern = "[\\(\\)\\{\\};,]";
+	private static String delimiterPattern = "[\\s\\(\\)\\{\\};,]";
 
 	private static String digitPattern = "[0..9]";
+	private static String signedIconstPattern = "0|(-|)([1..9][0..9]*)";
+	private static String fconstPattern = "(-|)(0|[1-9][0-9]*)\\.(0|[0-9]*[1-9])";
 
 	private static String variableTypePattern = "int|char|bool|float";
 	private static String statementPattern = "if|else|while|for|return";
-
-	private static String bracePattern = "{|}"; // area or scope of variables and functions
-	private static String parenPattern = "\\(|\\)"; // function or statement
+	private static String booleanStringPattern = "true|false";
 
 	private static Pattern pattern;
 	private static Matcher match;
-
+	
 	// Returns true if a given string matches with one whitespace character
-	public static boolean isWhitespace(String input) {
-		pattern = Pattern.compile(whitespacePattern);
-		match = pattern.matcher(input);
-
-		if (match.matches()) {
-			return true;
-		}
-
-		return false;
-	}
-
 	public static boolean isDelimiter(String input) {
 		pattern = Pattern.compile(delimiterPattern);
 		match = pattern.matcher(input);
@@ -65,7 +52,26 @@ public class Token {
 		if (match.matches()) {
 			return "STATEMENT";
 		}
-
+		
+		pattern = Pattern.compile(booleanStringPattern);
+		match = pattern.matcher(tokenCandidate);
+		if (match.matches()) {
+			return "BOOLEAN_STRING";
+		}
+		
+		pattern = Pattern.compile(signedIconstPattern);
+		match = pattern.matcher(tokenCandidate);
+		if (match.matches()) {
+			return "SIGNED_ICONST";
+		}
+		
+		pattern = Pattern.compile(fconstPattern);
+		match = pattern.matcher(tokenCandidate);
+		if (match.matches()) {
+			return "FCONST";
+		}
+		
+		// Check for delimiters
 		if (tokenCandidate.equals("(")) {
 			return "LPAREN";
 		}
@@ -90,7 +96,14 @@ public class Token {
 			return "SEMI";
 		}
 
-		return "NONE"; // belongs to none of the patterns
+		// "NONE" means not to put in the symbol table
+		pattern = Pattern.compile("\\s");
+		match = pattern.matcher(tokenCandidate);
+		if (match.matches()) {
+			return "NONE";
+		}
+		
+		return "NONE";
 	}
 
 	public Token(String name, String value) {

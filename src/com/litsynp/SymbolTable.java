@@ -17,7 +17,7 @@ public class SymbolTable {
 	
 	// Determine if the input string belongs to any token pattern, and put in the table if it is
 	// If not, the input is not put in the table
-	public void put(String input) {
+	public void put(String input) throws NullTokenException {
 		// If the input string is empty, return without putting in the symbol table
 		if (input.isEmpty()) {
 			return;
@@ -25,7 +25,13 @@ public class SymbolTable {
 		
 		// Determine if the string matches any of the predefined regex patterns
 		String tokenName = Token.getTokenName(input);
-		if (tokenName.equals("WHITESPACE") == false && tokenName.equals("NONE") == false) {
+
+		// If token name is "NULL", it does not belong to any token type - hence, error
+		if (tokenName.equals("NULL")) {
+			throw new NullTokenException("Token value \"" + input + "\" is not a valid token");
+		}
+		
+		if (tokenName.equals("WHITESPACE") == false) {
 			this.putToken(new Token(tokenName, input));
 		}
 	}

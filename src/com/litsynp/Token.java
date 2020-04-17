@@ -10,8 +10,6 @@ public class Token {
 	private String value;
 
 	// Predefined token patterns
-	private static String delimiterPattern = "[\\s\\(\\)\\{\\};,]";
-
 	private static String digitPattern = "[0-9]";
 	private static String signedIconstPattern = "0|(-|)([1-9][0-9]*)";
 	private static String fconstPattern = "(-|)(0|[1-9][0-9]*)\\.(0|[0-9]*[1-9])";
@@ -25,12 +23,16 @@ public class Token {
 	private static String statementPattern = "if|else|while|for|return";
 	private static String booleanStringPattern = "true|false";
 
+	private static String identifierPattern = "([a-zA-z]|_)([a-zA-z]|[0-9]|_)*";
+	
+	private static String delimiterPattern = "[\\s\\(\\)\\{\\};,=]" + "|"
+			+ arithmeticPattern + "|" + bitwisePattern + "|" + comparisonPattern;
+	
 	private static Pattern pattern;
 	private static Matcher match;
 	
 	// Returns true if a given string matches with one whitespace character
 	public static boolean isDelimiter(String input) {
-		// TODO: Add operators
 		pattern = Pattern.compile(delimiterPattern);
 		match = pattern.matcher(input);
 
@@ -130,6 +132,12 @@ public class Token {
 		if (tokenCandidate.equals(";")) {
 			return "SEMI";
 		}
+		
+		pattern = Pattern.compile(identifierPattern);
+		match = pattern.matcher(tokenCandidate);
+		if (match.matches()) {
+			return "ID";
+		}
 
 		// "WHITESPACE" is not put in the symbol table
 		pattern = Pattern.compile("\\s");
@@ -139,7 +147,7 @@ public class Token {
 		}
 
 		// "NONE" means to print errors
-		return "NONE";
+		return "NULL";
 	}
 
 	public Token(String name, String value) {

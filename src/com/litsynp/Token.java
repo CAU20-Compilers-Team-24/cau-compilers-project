@@ -11,9 +11,9 @@ public class Token {
 
 	// Predefined token patterns
 	private static String digitPattern = "[0-9]";
-	private static String signedIconstPattern = "0|((-|)([1-9][0-9]*))";
+	private static String signedIconstPattern = "0|(-|)([1-9][0-9]*)";
 	private static String fconstPattern = "(-|)(0|[1-9][0-9]*)\\.(0|[0-9]*[1-9])";
-	private static String literalStringPattern = "\"[0-9|a-zA-Z|\\s]*\"";
+	private static String literalStringPattern = "\"[^\"]*\"";
 	
 	private static String arithmeticPattern = "[+]|[-]|[*]|[/]";
 	private static String bitwisePattern = "<<|>>|[&]|[|]";

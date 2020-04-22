@@ -28,7 +28,7 @@ public class Main {
 
 		try {
 			// Create input stream
-			FileReader filereader = new FileReader(file);
+			FileReader filereader = new FileReader(inputFileName);
 
 			int ch = 0; // character just read
 			String inputBuffer = ""; // temporary string buffer
@@ -67,7 +67,7 @@ public class Main {
 		} catch (IOException e) {
 			System.out.println(e);
 		} catch (NullTokenException e) {
-			System.out.println(e + " at character " + readCharNum + " in " + file);
+			System.out.println(e + " at character " + readCharNum + " in " + inputFileName);
 			System.exit(1);
 		}
 

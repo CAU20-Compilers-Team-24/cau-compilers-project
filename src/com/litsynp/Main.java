@@ -4,14 +4,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Main {
 
 	public static void main(String[] args) {
+		
 		// Input file name
-		String inputFileName = "input-files\\input.txt";
+		String inputFileName = null;
+		
+		// Read argument for input file name
+		if (args.length > 0){
+            inputFileName = args[0];
+        } else {
+        	// Default input file name
+        	inputFileName = "input-files\\input.txt";
+        }
 		
 		// Symbol Table
 		SymbolTable symtab = new SymbolTable();

@@ -4,26 +4,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.swing.JFileChooser;
 
 public class Main {
 
 	public static void main(String[] args) {
-		// Create file object
-		File file = null;
-		JFileChooser chooser = new JFileChooser();
-		int returnValue = chooser.showOpenDialog(null);
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-		   file = chooser.getSelectedFile();
-			if(file.exists()){
-			}else{
-				System.out.println("Wrong File");
-			}
-	    	}else{
-	    	System.out.println("Wrong File");
-	    	}
+		
+		// Input file name
+		String inputFileName = null;
+		
+		// Read argument for input file name
+		if (args.length > 0){
+            inputFileName = args[0];
+        } else {
+        	// Default input file name
+        	inputFileName = "input-files\\input.txt";
+        }
 		
 		// Symbol Table
 		SymbolTable symtab = new SymbolTable();

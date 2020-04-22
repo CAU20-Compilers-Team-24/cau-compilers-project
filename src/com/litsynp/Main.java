@@ -6,12 +6,24 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JFileChooser;
 
 public class Main {
 
 	public static void main(String[] args) {
-		// Input file name
-		String inputFileName = "input-files\\input.txt";
+		// Create file object
+		File file = null;
+		JFileChooser chooser = new JFileChooser();
+		int returnValue = chooser.showOpenDialog(null);
+		if (returnValue == JFileChooser.APPROVE_OPTION) {
+		   file = chooser.getSelectedFile();
+			if(file.exists()){
+			}else{
+				System.out.println("Wrong File");
+			}
+	    	}else{
+	    	System.out.println("Wrong File");
+	    	}
 		
 		// Symbol Table
 		SymbolTable symtab = new SymbolTable();
@@ -20,8 +32,6 @@ public class Main {
 		int readCharNum = 0;
 
 		try {
-			// Create file object
-			File file = new File(inputFileName);
 			// Create input stream
 			FileReader filereader = new FileReader(file);
 
@@ -82,7 +92,7 @@ public class Main {
 		} catch (IOException e) {
 			System.out.println(e);
 		} catch (NullTokenException e) {
-			System.out.println(e + " at character " + readCharNum + " in " + inputFileName);
+			System.out.println(e + " at character " + readCharNum + " in " + file);
 			System.exit(1);
 		}
 

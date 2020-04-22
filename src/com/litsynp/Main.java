@@ -37,14 +37,10 @@ public class Main {
 
 			int ch = 0; // character just read
 			String inputBuffer = ""; // temporary string buffer
-			
-			// true if the cursor in two double quotes, false if not
-			boolean isLiteralString = false; 
 
 			// Read character one by one from input stream
 			while ((ch = filereader.read()) != -1) {
 				readCharNum++;
-				
 				// Convert character to string
 				String readCharStr = Character.toString((char) ch);
 
@@ -53,35 +49,19 @@ public class Main {
 				System.out.println("inputBuffer: " + inputBuffer);
 				System.out.println("Character read: \'" + Character.toString((char) ch) + "\'");
 
-				if (isLiteralString == false && Token.isDelimiter(readCharStr)) {
-					// If the read character belongs to any of the delimiters
+				// If the read character belongs to any of the delimiters
+				if (Token.isDelimiter(readCharStr)) {
 					symtab.put(inputBuffer); // Put the read buffer in the symbol table
 					symtab.put(readCharStr); // Put the delimiter in the symbol table
-					
+
 					// Clear the string buffer and read next character
 					inputBuffer = "";
 					continue;
 				}
-				
-				// If the sequence is not within two double quotes
-				if (isLiteralString == false) {
-					// If the input character is a double quote
-					if (readCharStr.equals("\"")) {
-						isLiteralString = true; // Mark the beginning of a literal string
-					}
-				} else if (readCharStr.equals("\"")) {
-						// if the sequence of literal string meets its end
-						inputBuffer += Character.toString((char) ch);
-						
-						// Read next character, with input buffer containing the full literal string
-						isLiteralString = false; // Mark the end of a literal string
-						continue; 
-				} 
 
-				// Add the character to the string buffer
+				// If not, add the character to the string buffer
 				inputBuffer += Character.toString((char) ch);
 			}
-			
 			// Put the last input string in the symbol table
 			symtab.put(inputBuffer);
 

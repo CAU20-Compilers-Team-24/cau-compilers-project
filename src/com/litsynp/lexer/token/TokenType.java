@@ -134,11 +134,11 @@ public enum TokenType {
 		case ARITHMETIC_OP:
 			return "ARITHMETIC_OP";
 		case BITWISE_OP:
-			return "ARITHMETIC_OP";
+			return "BITWISE_OP";
 		case COMP_OP:
-			return "ARITHMETIC_OP";
+			return "COMP_OP";
 		case ASSIGN_OP:
-			return "ARITHMETIC_OP";
+			return "ASSIGN_OP";
 
 		case VARIABLE_TYPE:
 			return "VARIABLE_TYPE";

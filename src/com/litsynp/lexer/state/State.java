@@ -1,6 +1,5 @@
 package com.litsynp.lexer.state;
 
-import com.litsynp.lexer.token.Token;
 import com.litsynp.lexer.token.TokenType;
 
 // ex) i n t

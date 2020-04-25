@@ -4,7 +4,7 @@ import com.litsynp.lexer.token.TokenType;
 
 // ex) i n t
 /**
- * The class that holds information of a state in the definitive automata (DFA).
+ * The class that holds information of a state in the deterministic finite automata (DFA).
  */
 public enum State {
 	START, 
@@ -142,7 +142,7 @@ public enum State {
 	/**
 	 * Transitions a state with input to a new state.
 	 * <p>
-	 * This method holds the whole transition table of the definitive automata (DFA).
+	 * This method holds the whole transition table of the DFA.
 	 * 
 	 * This transition table does not include the transitions for final state.
 	 * 

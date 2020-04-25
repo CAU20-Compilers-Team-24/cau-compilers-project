@@ -50,10 +50,11 @@ public enum State {
 	
 	STATEMENT_Q11_o,
 	STATEMENT_Q12(true, TokenType.STATEMENT),
-	
-	SIGNED_ICONST_Q0(true, TokenType.SIGNED_ICONST),
+
+	SIGNED_ICONST_Q0,
 	SIGNED_ICONST_Q1,
 	SIGNED_ICONST_Q2(true, TokenType.SIGNED_ICONST),
+	SIGNED_ICONST_Q3(true, TokenType.SIGNED_ICONST),
 	
 	FCONST_Q0,
 	FCONST_Q1,
@@ -160,9 +161,9 @@ public enum State {
 			else if (input == 'w') 					return STATEMENT_Q2_w;
 			else if (input == 'r') 					return STATEMENT_Q6_r;
 			else if (input == 't') 					return BOOLEAN_STRING_Q0_t;
-			else if (input == '0') 					return SIGNED_ICONST_Q0;
-			else if (input == '-') 					return SIGNED_ICONST_Q1;
-			else if (isNonZeroDigit(input)) 		return SIGNED_ICONST_Q2;
+			else if (input == '-') 					return SIGNED_ICONST_Q0;
+			else if (input == '0') 					return SIGNED_ICONST_Q2;
+			else if (isNonZeroDigit(input)) 		return SIGNED_ICONST_Q3;
 			else 									return NOT_ACCEPTED;
 			
 		case VAR_TYPE_Q0_f:
@@ -263,15 +264,19 @@ public enum State {
 			else									return NOT_ACCEPTED;
 			
 		case SIGNED_ICONST_Q0:
-			if (input == '.')						return FCONST_Q0;
+			if (input == '0')						return SIGNED_ICONST_Q1;
+			else if (isNonZeroDigit(input))			return SIGNED_ICONST_Q3;
 			else									return NOT_ACCEPTED;
 		case SIGNED_ICONST_Q1:
-			if (isNonZeroDigit(input))				return SIGNED_ICONST_Q2;
-			else									return NOT_ACCEPTED;
+			if (input == '.')						return FCONST_Q0;
+			else 									return NOT_ACCEPTED;
 		case SIGNED_ICONST_Q2:
-			if (isDigit(input))						return SIGNED_ICONST_Q2;
-			else if (input == '.')					return FCONST_Q0;
-			else									return NOT_ACCEPTED;
+			if (input == '.')						return FCONST_Q0;
+			else 									return NOT_ACCEPTED;
+		case SIGNED_ICONST_Q3:
+			if (input == '.')						return FCONST_Q0;
+			else if (isDigit(input))				return SIGNED_ICONST_Q3;
+			else 									return NOT_ACCEPTED;
 			
 		case FCONST_Q0:
 			if (isDigit(input))						return FCONST_Q2;

@@ -9,6 +9,7 @@ import com.litsynp.lexer.token.TokenType;
 public enum State {
 	START, 
 	
+	// Variable types
 	VAR_TYPE_Q0_f,
 	VAR_TYPE_Q1_l,
 	VAR_TYPE_Q2_o,
@@ -25,6 +26,20 @@ public enum State {
 	VAR_TYPE_Q10_o,
 	VAR_TYPE_Q11(true, TokenType.VARIABLE_TYPE),
 	
+	// Operators
+	ARITHMETIC_OP_Q0(true, TokenType.ARITHMETIC_OP),
+	ARITHMETIC_OP_Q1(true, TokenType.ARITHMETIC_OP),
+	
+	BITWISE_OP_Q0(true, TokenType.BITWISE_OP),
+	
+	COMPARISON_OP_Q0,
+	COMPARISON_OP_Q1(true, TokenType.COMP_OP),
+	COMPARISON_OP_Q2(true, TokenType.COMP_OP),
+	COMPARISON_OP_Q3(true, TokenType.COMP_OP),
+	
+	ASSIGN_OP_Q0(true, TokenType.ASSIGN_OP),
+	
+	// Boolean strings
 	BOOLEAN_STRING_Q0_t,
 	BOOLEAN_STRING_Q1_r,
 	BOOLEAN_STRING_Q2_u,
@@ -33,6 +48,7 @@ public enum State {
 	BOOLEAN_STRING_Q4_l,
 	BOOLEAN_STRING_Q5(true, TokenType.BOOLEAN_STRING),
 	
+	// Statements
 	STATEMENT_Q0_e,
 	STATEMENT_Q1_l,
 	
@@ -50,15 +66,16 @@ public enum State {
 	STATEMENT_Q11_o,
 	STATEMENT_Q12(true, TokenType.STATEMENT),
 
+	// Numbers
 	SIGNED_ICONST_Q0,
-	SIGNED_ICONST_Q1,
+	SIGNED_ICONST_Q1(true, TokenType.SIGNED_ICONST),
 	SIGNED_ICONST_Q2(true, TokenType.SIGNED_ICONST),
-	SIGNED_ICONST_Q3(true, TokenType.SIGNED_ICONST),
 	
 	FCONST_Q0,
 	FCONST_Q1,
 	FCONST_Q2(true, TokenType.FCONST),
 	
+	// Not accepted
 	NOT_ACCEPTED(true, TokenType.NOT_ACCEPTED);
 	
 	/**
@@ -151,6 +168,10 @@ public enum State {
 	 */
 	public State transition(char input) {
 		switch(this) {
+
+		/*
+		 * Starting state
+		 */
 		case START:
 			if (input == 'f') 						return VAR_TYPE_Q0_f;
 			else if (input == 'i') 					return VAR_TYPE_Q3_i;
@@ -160,11 +181,24 @@ public enum State {
 			else if (input == 'w') 					return STATEMENT_Q2_w;
 			else if (input == 'r') 					return STATEMENT_Q6_r;
 			else if (input == 't') 					return BOOLEAN_STRING_Q0_t;
-			else if (input == '-') 					return SIGNED_ICONST_Q0;
-			else if (input == '0') 					return SIGNED_ICONST_Q2;
-			else if (isNonZeroDigit(input)) 		return SIGNED_ICONST_Q3;
+			else if (input == '-') 					return ARITHMETIC_OP_Q0;
+			else if (input == '+' 
+					|| input == '*' 
+					|| input == '/')				return ARITHMETIC_OP_Q1;
+			else if (input == '&'
+					|| input == '|')				return BITWISE_OP_Q0;
+			else if (input == '!')					return COMPARISON_OP_Q0;
+			else if (input == '<')					return COMPARISON_OP_Q1;
+			else if (input == '>') 					return COMPARISON_OP_Q2;
+			else if (input == '=')					return ASSIGN_OP_Q0;
+			else if (input == '0') 					return SIGNED_ICONST_Q1;
+			else if (isNonZeroDigit(input)) 		return SIGNED_ICONST_Q2;
 			else 									return NOT_ACCEPTED;
 			
+
+			/*
+			 * Variable types
+			 */
 		case VAR_TYPE_Q0_f:
 			if (input == 'l') 						return VAR_TYPE_Q1_l;
 			else if (input == 'o') 					return STATEMENT_Q11_o;
@@ -205,7 +239,32 @@ public enum State {
 			if (input == 'l')						return VAR_TYPE_Q11;
 			else 									return NOT_ACCEPTED;
 			
+			/*
+			 * Operators
+			 */
+		case ARITHMETIC_OP_Q0:
+			if (input == '0')						return SIGNED_ICONST_Q0;
+			else if (isNonZeroDigit(input))			return SIGNED_ICONST_Q2;
+			else									return NOT_ACCEPTED;
+		case COMPARISON_OP_Q0:
+			if (input == '=')						return COMPARISON_OP_Q3;
+			else									return NOT_ACCEPTED;
+		case COMPARISON_OP_Q1:
+			if (input == '=')						return COMPARISON_OP_Q3;
+			else if (input == '<')					return BITWISE_OP_Q0;
+			else									return NOT_ACCEPTED;
+		case COMPARISON_OP_Q2:
+			if (input == '=')						return COMPARISON_OP_Q3;
+			else if (input == '>')					return BITWISE_OP_Q0;
+			else									return NOT_ACCEPTED;
+		case ASSIGN_OP_Q0:
+			if (input == '=')						return COMPARISON_OP_Q3;
+			else									return NOT_ACCEPTED;
 			
+
+			/*
+			 * Statements
+			 */
 		case STATEMENT_Q0_e:
 			if (input == 'l')						return STATEMENT_Q1_l;
 			else 									return NOT_ACCEPTED;
@@ -246,6 +305,10 @@ public enum State {
 			if (input == 'r')						return STATEMENT_Q12;
 			else 									return NOT_ACCEPTED;
 			
+
+			/*
+			 * Boolean strings
+			 */
 		case BOOLEAN_STRING_Q0_t:
 			if (input == 'r')						return BOOLEAN_STRING_Q1_r;
 			else									return NOT_ACCEPTED;
@@ -263,20 +326,20 @@ public enum State {
 			else									return NOT_ACCEPTED;
 			
 		case SIGNED_ICONST_Q0:
-			if (input == '0')						return SIGNED_ICONST_Q1;
-			else if (isNonZeroDigit(input))			return SIGNED_ICONST_Q3;
-			else									return NOT_ACCEPTED;
+			if (input == '.')						return FCONST_Q0;
+			else 									return NOT_ACCEPTED;
 		case SIGNED_ICONST_Q1:
 			if (input == '.')						return FCONST_Q0;
 			else 									return NOT_ACCEPTED;
 		case SIGNED_ICONST_Q2:
 			if (input == '.')						return FCONST_Q0;
-			else 									return NOT_ACCEPTED;
-		case SIGNED_ICONST_Q3:
-			if (input == '.')						return FCONST_Q0;
-			else if (isDigit(input))				return SIGNED_ICONST_Q3;
+			else if (isDigit(input))				return SIGNED_ICONST_Q2;
 			else 									return NOT_ACCEPTED;
 			
+
+			/*
+			 * Constant numbers
+			 */
 		case FCONST_Q0:
 			if (isDigit(input))						return FCONST_Q2;
 			else									return NOT_ACCEPTED;
@@ -289,6 +352,10 @@ public enum State {
 			else if (isNonZeroDigit(input))			return FCONST_Q2;
 			else									return NOT_ACCEPTED;
 			
+
+			/*
+			 * Not accepted
+			 */
 		default:
 			return NOT_ACCEPTED;
 		}

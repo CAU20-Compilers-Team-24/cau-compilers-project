@@ -2,8 +2,10 @@ package com.litsynp.lexer;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import com.litsynp.lexer.state.State;
 import com.litsynp.lexer.token.NullTokenException;
@@ -113,5 +115,16 @@ public class LexicalAnalyzer {
 
 		// Print information in symbol table
 		symtab.printTable();
+		
+		// Print symbol table to a file
+		try {
+			PrintStream out = new PrintStream(new FileOutputStream("input-files\\output.txt"));
+			System.setOut(out);
+			symtab.printTable();
+			System.setOut(System.out);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

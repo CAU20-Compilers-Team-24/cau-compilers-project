@@ -41,34 +41,65 @@ public class LexicalAnalyzer {
 
             // Read the input file line by line
             while ((line = reader.readLine()) != null) {
-                System.out.println(String.format("[Line %3d START]", lineCount));
+                System.out.println(String.format("[Line %3d Content]", lineCount + 1) + line);
 
-                // Read character by character in the line and transition the state
+                // Initialize variables for reading the line
                 State currentState = State.START;
                 String workingString = "";
                 char ch = 0;
 
+                /*
+                 * String literal works like an exception to the delimiter rules, which is
+                 * splitting token for every delimiter, especially every whitespace.
+                 * 
+                 * The value of isStringLiteral becomes: * true if the lexer meets an opening
+                 * double quote("). * false if the lexer meets a closing double quote(").
+                 * 
+                 * This checks whether workingString is currently within two double quotes. The
+                 * default value is false.
+                 */
+                boolean isStringLiteral = false;
+                
+                // If it is the last character of the line
+                boolean isLastCharacter = false;
+
+                // Read character by character in the line and transition the state
                 for (charCount = 0; charCount < line.length(); charCount++) {
                     // Get the next input character
                     ch = line.charAt(charCount);
+                    
+                    // Check if it is the last character
+                    isLastCharacter = (charCount == line.length() - 1);
+                    
+                    System.out.println(String.format("[Line %3d] %3d", lineCount + 1, charCount)
+                            + "th character|Read character:\'" + ch + "\'|Current String:" + workingString);
 
-                    System.out.println(String.format("[Line %3d] %3d", lineCount, charCount)
-                            + "th character|Read character:\'" + ch + "\'|Current String:\"" + workingString + "\"");
-
-                    // No interesting input received
                     if ((workingString.equals("") || workingString.equals(" ")) && TokenType.isWhitespace(ch)) {
+                        // No interesting input received
                         continue;
-                    }
+                    } else if (ch == '"' && (isStringLiteral == false)) {
+                        // Found a opening double quote character (") from the line
 
-                    /*
-                     * If the state can be accepted and the input is a delimiter, create a
-                     * corresponding token and put it into the symbol table
-                     */
-                    if (workingString.length() > 0 && TokenType.isDelimiter(ch)) {
+                        workingString = workingString + ch;
+                        currentState = currentState.transition(line.charAt(charCount));
+                        System.out.println("string literal: " + isStringLiteral);
+                        
+                        // Prepare for string after the opening double quote
+                        isStringLiteral = true;
+                        continue;
+                    } else if (isStringLiteral == false && workingString.length() > 0 && TokenType.isDelimiter(ch)) {
+                        /*
+                         * If the state can be accepted and the input is a delimiter, create a
+                         * corresponding token and put it into the symbol table
+                         */
+
                         System.out.println("Current workingString: \"" + workingString + "\" and found a delimiter \""
                                 + ch + "\"");
 
+                        // Put the output token in the symbol table
                         symtab.put(new Token(currentState.getTokenType(), workingString));
+
+                        // Also put the delimiter token in the symbol table
                         symtab.put(new Token(TokenType.getDelimiterTokenType(ch), Character.toString(ch)));
 
                         // Initialize for next input word
@@ -77,15 +108,29 @@ public class LexicalAnalyzer {
                         continue;
                     }
 
-                    // Also tokenize the last word in the line
-                    if (charCount == line.length() - 1) {
-                        workingString = workingString + ch;
-                        currentState = currentState.transition(line.charAt(charCount));
-                        symtab.put(new Token(currentState.getTokenType(), workingString));
-                    }
-
                     workingString = workingString + ch;
                     currentState = currentState.transition(line.charAt(charCount));
+                    System.out.println("string literal: " + isStringLiteral);
+
+                    if ((isStringLiteral == true) && (ch == '"')) {
+                        // Found a closing double quote character from the line
+
+                        // Put the literal string token in the symbol table
+                        symtab.put(new Token(currentState.getTokenType(), workingString));
+
+                        // Initialize for next input word
+                        isStringLiteral = false;
+                        workingString = "";
+                        currentState = State.START;
+                        continue;
+                    }
+
+                    if (isLastCharacter == true) {
+                        // Also tokenize the last word in the line
+
+                        // Put the output token in the symbol table
+                        symtab.put(new Token(currentState.getTokenType(), workingString));
+                    }
                 }
 
                 // Prepare for next line
@@ -93,12 +138,13 @@ public class LexicalAnalyzer {
             }
 
             reader.close();
+
         } catch (FileNotFoundException e) {
             System.out.println(e);
         } catch (IOException e) {
             System.out.println(e);
         } catch (NullTokenException e) {
-            System.out.println(e + " at character " + charCount + " in line " + lineCount + " in " + fileName);
+            System.out.println(e + " at character " + charCount + " in line " + (lineCount + 1) + " in " + fileName);
             System.exit(1);
         }
 

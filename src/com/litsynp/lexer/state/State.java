@@ -81,6 +81,10 @@ public enum State {
     FCONST_Q0,
     FCONST_Q1,
     FCONST_Q2(TokenType.FCONST),
+    
+    // Literal string
+    LITERAL_STRING_Q0,
+    LITERAL_STRING_Q1(TokenType.LITERAL_STRING),
 
     // Not accepted
     NOT_ACCEPTED(TokenType.NOT_ACCEPTED);
@@ -158,6 +162,16 @@ public enum State {
     public boolean isNonZeroDigit(char ch) {
         return Character.isDigit(ch) && (ch != '0');
     }
+    
+    /**
+     * Returns whether a given character is considered a whitespace ' '|'\t'|'\n'
+     * 
+     * @param ch character to test whether it is considered a whitespace
+     * @return boolean value of whether <b>ch</> is a whitespace
+     */
+    public boolean isWhitespace(char ch) {
+        return (ch == ' ' || ch == '\t' || ch == '\n');
+    }
 
     /**
      * Transitions a state with input to a new state.
@@ -198,6 +212,7 @@ public enum State {
             else if (input == '=')                return ASSIGN_OP_Q0;
             else if (input == '0')                return SIGNED_ICONST_Q1;
             else if (isNonZeroDigit(input))       return SIGNED_ICONST_Q2;
+            else if (input == '"')                return LITERAL_STRING_Q0;
             else                                  return NOT_ACCEPTED;
 
             // Variable types
@@ -343,6 +358,13 @@ public enum State {
             else if (isNonZeroDigit(input))       return FCONST_Q2;
             else                                  return NOT_ACCEPTED;
 
+            // Literal string
+        case LITERAL_STRING_Q0:
+            if (isDigit(input))                   return LITERAL_STRING_Q0;
+            else if (isLetter(input))             return LITERAL_STRING_Q0;
+            else if (isWhitespace(input))         return LITERAL_STRING_Q0;
+            else if (input == '"')                return LITERAL_STRING_Q1;
+            else                                  return NOT_ACCEPTED;
             // Not accepted
         default:
             return NOT_ACCEPTED;

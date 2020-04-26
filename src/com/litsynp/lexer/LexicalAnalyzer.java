@@ -59,77 +59,64 @@ public class LexicalAnalyzer {
                  * default value is false.
                  */
                 boolean isStringLiteral = false;
-                
+
                 // If it is the last character of the line
                 boolean isLastCharacter = false;
 
                 // Read character by character in the line and transition the state
-                for (charCount = 0; charCount < line.length(); charCount++) {
-                    // Get the next input character
-                    ch = line.charAt(charCount);
-                    
+                for (charCount = 0; charCount < line.length() + 1; charCount++) {
+
                     // Check if it is the last character
-                    isLastCharacter = (charCount == line.length() - 1);
-                    
+                    isLastCharacter = (charCount == line.length());
+
+                    if (isLastCharacter == true) {
+                        // Mimic the last character of the line as whitespace for convenience
+                        ch = ' ';
+                    } else {
+                        // Get the next input character
+                        ch = line.charAt(charCount);
+                    }
+
                     System.out.println(String.format("[Line %3d] %3d", lineCount + 1, charCount)
                             + "th character|Read character:\'" + ch + "\'|Current String:" + workingString);
 
                     if ((workingString.equals("") || workingString.equals(" ")) && TokenType.isWhitespace(ch)) {
                         // No interesting input received
                         continue;
-                    } else if (ch == '"' && (isStringLiteral == false)) {
-                        // Found a opening double quote character (") from the line
+                    }
 
-                        workingString = workingString + ch;
+                    // Transition
+                    if (isStringLiteral == false) { // Not within double quotes
+                        if (TokenType.isDelimiter(ch)) {
+                            // If the state can be accepted and the input is a delimiter
+                            System.out.println("Current workingString: \"" + workingString
+                                    + "\" and found a delimiter \"" + ch + "\"");
+
+                            // Put the output token in the symbol table
+                            if (workingString.length() > 0) {
+                                symtab.put(new Token(currentState.getTokenType(), workingString));
+                            }
+                            symtab.put(new Token(TokenType.getDelimiterTokenType(ch), Character.toString(ch)));
+
+                            // Initialize for next input word
+                            workingString = "";
+                            currentState = State.START;
+                        } else if (ch == '"') { // Opening double quote
+                            workingString += ch;
+                            currentState = currentState.transition(line.charAt(charCount));
+                            isStringLiteral = true;
+
+                        } else {
+                            workingString += ch;
+                            currentState = currentState.transition(line.charAt(charCount));
+                        }
+                    } else { // Within double quotes
+                        workingString += ch;
                         currentState = currentState.transition(line.charAt(charCount));
-                        System.out.println("string literal: " + isStringLiteral);
-                        
-                        // Prepare for string after the opening double quote
-                        isStringLiteral = true;
-                        continue;
-                    } else if (isStringLiteral == false && workingString.length() > 0 && TokenType.isDelimiter(ch)) {
-                        /*
-                         * If the state can be accepted and the input is a delimiter, create a
-                         * corresponding token and put it into the symbol table
-                         */
 
-                        System.out.println("Current workingString: \"" + workingString + "\" and found a delimiter \""
-                                + ch + "\"");
-
-                        // Put the output token in the symbol table
-                        symtab.put(new Token(currentState.getTokenType(), workingString));
-
-                        // Also put the delimiter token in the symbol table
-                        symtab.put(new Token(TokenType.getDelimiterTokenType(ch), Character.toString(ch)));
-
-                        // Initialize for next input word
-                        workingString = "";
-                        currentState = State.START;
-                        continue;
-                    }
-
-                    workingString = workingString + ch;
-                    currentState = currentState.transition(line.charAt(charCount));
-                    System.out.println("string literal: " + isStringLiteral);
-
-                    if ((isStringLiteral == true) && (ch == '"')) {
-                        // Found a closing double quote character from the line
-
-                        // Put the literal string token in the symbol table
-                        symtab.put(new Token(currentState.getTokenType(), workingString));
-
-                        // Initialize for next input word
-                        isStringLiteral = false;
-                        workingString = "";
-                        currentState = State.START;
-                        continue;
-                    }
-
-                    if (isLastCharacter == true) {
-                        // Also tokenize the last word in the line
-
-                        // Put the output token in the symbol table
-                        symtab.put(new Token(currentState.getTokenType(), workingString));
+                        if (ch == '"') { // Closing double quote
+                            isStringLiteral = false;
+                        }
                     }
                 }
 

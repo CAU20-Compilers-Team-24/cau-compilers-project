@@ -14,11 +14,10 @@ public class Main {
             fileName = args[0];
         } else {
         	// Default input file name
-        	fileName = "input-files\\input.txt";
+        	fileName = "files\\input.txt";
         }
 
 		LexicalAnalyzer.lex(fileName);
-		
 	}
 
 }

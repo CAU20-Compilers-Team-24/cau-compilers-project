@@ -30,6 +30,7 @@ public class LexicalAnalyzer {
 		// Symbol Table
 		SymbolTable symtab = new SymbolTable();
 		int lineCount = 0;
+		int charCount = 0;
 
 		try {
 			// Create input stream
@@ -40,23 +41,22 @@ public class LexicalAnalyzer {
 
 			// Read the input file line by line
 			while ((line = reader.readLine()) != null) {
-				System.out.println(String.format("-----Line %-4d Start---", lineCount));
-				System.out.println("[Line " + lineCount + "]" + line);
+				System.out.println(String.format("[Line %3d START]", lineCount));
 
 				// Read character by character in the line and transition the state
 				State currentState = State.START;
 				String workingString = "";
 				char ch = 0;
 
-				for (int i = 0; i < line.length(); i++) {
+				for (charCount = 0; charCount < line.length(); charCount++) {
 					// Get the next input character
-					ch = line.charAt(i);
-
-					System.out.println(String.format("%4d", i) + "th character|Read ch: " + ch + "|workingString:\""
-							+ workingString + "\"");
+					ch = line.charAt(charCount);
+					
+					System.out.println(String.format("[Line %3d] %3d", lineCount, charCount)
+							+ "th character|Read character:\'" + ch + "\'|Current String:\"" + workingString + "\"");
 
 					// No interesting input received
-					if ((workingString.equals("") || workingString.equals(" ")) && TokenType.isDelimiter(ch)) {
+					if ((workingString.equals("") || workingString.equals(" ")) && TokenType.isWhitespace(ch)) {
 						continue;
 					}
 
@@ -64,28 +64,29 @@ public class LexicalAnalyzer {
 					 * If the state can be accepted and the input is a delimiter, create a
 					 * corresponding token and put it into the symbol table
 					 */
-					if (workingString.length() > 0 && !TokenType.isDelimiter(workingString.charAt(0))
-							&& TokenType.isDelimiter(ch)) {
+					
+					if (workingString.length() > 0 && TokenType.isDelimiter(ch)) {
 						System.out.println("Current workingString: \"" + workingString + "\" and found a delimiter \""
 								+ ch + "\"");
 
 						symtab.put(new Token(currentState.getTokenType(), workingString));
 						symtab.put(new Token(TokenType.getDelimiterTokenType(ch), Character.toString(ch)));
-
+						
 						// Initialize for next input word
 						workingString = "";
 						currentState = State.START;
 						continue;
 					}
 
-					workingString = workingString + ch;
-					currentState = currentState.transition(line.charAt(i));
-				}
-				System.out.println("End of for-loop");
+					// Also tokenize the last word in the line
+					if (charCount == line.length() - 1) {
+						workingString = workingString + ch;
+						currentState = currentState.transition(line.charAt(charCount));
+						symtab.put(new Token(currentState.getTokenType(), workingString));
+					}
 
-				// Tokenize last word in the line
-				if (workingString.length() > 0 && !TokenType.isDelimiter(workingString.charAt(0))) {
-					symtab.put(new Token(currentState.getTokenType(), workingString));
+					workingString = workingString + ch;
+					currentState = currentState.transition(line.charAt(charCount));
 				}
 
 				// Initialize for next input word
@@ -94,36 +95,30 @@ public class LexicalAnalyzer {
 
 				// Read next line
 				lineCount = lineCount + 1;
-				System.out.println(String.format("-----Line %-4d End-----", lineCount));
 			}
-			
+
 			reader.close();
 		} catch (FileNotFoundException e) {
 			System.out.println(e);
 		} catch (IOException e) {
 			System.out.println(e);
 		} catch (NullTokenException e) {
-			System.out.println(e);
+			System.out.println(e + " at character " + charCount + " in line " + lineCount + " in " + fileName);
 			System.exit(1);
 		}
-//		catch (NullTokenException e) {
-//			System.out.println(e + " at character " + readCharNum + " in " + fileName);
-//			System.exit(1);
-//		}
 
 		System.out.println("\nRead " + lineCount + " line(s) from the file \"" + fileName + "\".");
 
 		// Print information in symbol table
 		symtab.printTable();
-		
+
 		// Print symbol table to a file
 		try {
-			PrintStream out = new PrintStream(new FileOutputStream("input-files\\output.txt"));
+			PrintStream out = new PrintStream(new FileOutputStream("files\\output.txt"));
 			System.setOut(out);
 			symtab.printTable();
 			System.setOut(System.out);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

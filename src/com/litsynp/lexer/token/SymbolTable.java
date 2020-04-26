@@ -13,24 +13,22 @@ public class SymbolTable {
 	// Put token into the symbol table
 	public void put(Token token) throws NullTokenException {
 
-		// If the token is a whitespace
+		// If the token is a whitespace, skip
 		if (token.getName() == TokenType.WHITESPACE) {
-			System.out.println("{KEY=" + token.getName() + ":VALUE=" + token.getValue() + "} is a whitespace, so not adding to the symbol table.");
 			return;
 		}
-		
-		// If the token is not accepted
+				
+		// If the token is not accepted, print error
 		if (token.getName() == null || (token.getName() == TokenType.NOT_ACCEPTED)) {
-			throw new NullTokenException("Token type does not exist for \"" + token.getValue() + "\"");
+			throw new NullTokenException("{KEY=" + token.getName() + ":VALUE=" + token.getValue() + "} is not accepted");
 		} 
 		
-		// If the type is yet to be defined
+		// If the type is yet to be defined, but attempted to be put in the table, print error
 		else if (token.getName() == TokenType.NOT_YET_A_TOKEN) {
-//			System.out.println("{KEY=" + token.getName() + ":VALUE=" + token.getValue() + "} is not yet a token.");
-			throw new NullTokenException("{KEY=" + token.getName() + ":VALUE=" + token.getValue() + "} is not yet a token and hence not accepted.\n");
+			throw new NullTokenException("{KEY=" + token.getName() + ":VALUE=" + token.getValue() + "} is not yet a token and hence not accepted");
 		}
-		
-		// Don't put whitespace character into the symbol table
+
+		// If not, put the token in the symbol table
 		else {
 			System.out.println("Successively put {KEY=" + token.getName() + ":VALUE=" + token.getValue() + "} into the symbol table.");
 			tokens.add(token);

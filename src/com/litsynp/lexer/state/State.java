@@ -26,6 +26,12 @@ public enum State {
 	VAR_TYPE_Q10_o,
 	VAR_TYPE_Q11(TokenType.VARIABLE_TYPE),
 	
+	// Parentheses, braces, comma and semicolon
+	LPAREN_Q0(TokenType.LPAREN),
+	RPAREN_Q0(TokenType.RPAREN),
+	COMMA_Q0(TokenType.COMMA),
+	SEMI_Q0(TokenType.SEMI),
+	
 	// Operators
 	ARITHMETIC_OP_Q0(TokenType.ARITHMETIC_OP),
 	ARITHMETIC_OP_Q1(TokenType.ARITHMETIC_OP),
@@ -175,6 +181,10 @@ public enum State {
 			else if (input == 'w') 					return STATEMENT_Q2_w;
 			else if (input == 'r') 					return STATEMENT_Q6_r;
 			else if (input == 't') 					return BOOLEAN_STRING_Q0_t;
+			else if (input == '(')					return LPAREN_Q0;
+			else if (input == ')')					return RPAREN_Q0;
+			else if (input == ',')					return COMMA_Q0;
+			else if (input == ';')					return SEMI_Q0;
 			else if (input == '-') 					return ARITHMETIC_OP_Q0;
 			else if (input == '+' 
 					|| input == '*' 

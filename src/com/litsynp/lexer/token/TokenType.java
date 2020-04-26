@@ -1,6 +1,8 @@
 package com.litsynp.lexer.token;
 
-// Class to hold information of a token type
+/**
+ * Class to hold information of a token type
+ */
 public enum TokenType {
 
     // Delimiters
@@ -124,6 +126,11 @@ public enum TokenType {
         }
     }
 
+    /**
+     * Returns string value for token type.
+     * 
+     * @return the token type in string value
+     */
     public String toString() {
         switch (this) {
         case WHITESPACE:

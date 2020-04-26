@@ -2,15 +2,28 @@ package com.litsynp.lexer.token;
 
 import java.util.ArrayList;
 
-// Class to hold information about accumulated tokens
+/**
+ * Class to hold information about accumulated tokens
+ */
 public class SymbolTable {
-    private ArrayList<Token> tokens;
+    /**
+     * list of tokens in the symbol table
+     */
+    private ArrayList<Token> tokens; 
 
+    /**
+     * Creates a new symbol table.
+     */
     public SymbolTable() {
         tokens = new ArrayList<Token>();
     }
 
-    // Put token into the symbol table
+    /**
+     * Puts a new token into the symbol table.
+     *
+     * @param token the new token to be put in the table
+     * @throws NullTokenException when being attempted to put a not accepted token
+     */
     public void put(Token token) throws NullTokenException {
 
         // If the token is a whitespace, skip
@@ -40,7 +53,11 @@ public class SymbolTable {
         }
     }
 
-    // Remove the last token from the symbol table and return the removed token
+    /**
+     * Removes the last token from the symbol table and returns the removed token.
+     * 
+     * @return the last token that is removed by the method
+     */
     public Token pop() {
         int size = tokens.size();
 
@@ -52,18 +69,29 @@ public class SymbolTable {
         return new Token(delTokenName, delTokenValue); // return a clone of the deleted token
     }
 
-    // Get index'th symbol in the symbol table
+    /**
+     * Gets index'th token in the symbol table.
+     * 
+     * @param index the index of the token in the symbol table
+     * @return the index'th token in the symbol table
+     */
     public Token get(int index) {
         return tokens.get(index);
     }
 
-    // Get a reference of the last token in the symbol table
+    /**
+     * Gets a reference of the last token in the symbol table
+     * 
+     * @return a reference of the last token in the symbol table
+     */
     public Token getLast() {
         int size = tokens.size();
         return tokens.get(size - 1);
     }
 
-    // Print all of the tokens in the symbol table
+    /**
+     * Prints all of the tokens in the symbol table in a readable format
+     */
     public void printTable() {
         System.out.println("┌────────────────────────────┬────────────────────────────┐"); // 1 + 28 + 1 + 28 + 1
 

@@ -2,12 +2,12 @@ package com.litsynp.lexer.state;
 
 import com.litsynp.lexer.token.TokenType;
 
-// ex) i n t
 /**
  * The class that holds information of a state in the deterministic finite
  * automata (DFA).
  */
 public enum State {
+    // Start state
     START,
 
     // Variable types
@@ -86,15 +86,16 @@ public enum State {
     NOT_ACCEPTED(TokenType.NOT_ACCEPTED);
 
     /**
-     * Predicted token type of the current state if the transition ends there. If
-     * tokenType is not NOT_YET_A_TOKEN, it means this is a final state.
+     * Predicted token type of the current state if the transition ends there.
+     * <p>
+     * If tokenType is not NOT_YET_A_TOKEN, it means this is a final state.
      */
     TokenType tokenType;
 
     /**
      * Creates a new non-final state.
      */
-    State() {
+    private State() {
         this.tokenType = TokenType.NOT_YET_A_TOKEN;
     }
 
@@ -162,7 +163,7 @@ public enum State {
      * Transitions a state with input to a new state.
      * <p>
      * This method holds the whole transition table of the DFA.
-     * 
+     * <p>
      * This transition table does not include the transitions for final state.
      * 
      * @param input the input character which the state can transition with

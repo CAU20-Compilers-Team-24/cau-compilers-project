@@ -87,7 +87,7 @@ public class LexicalAnalyzer {
                     workingString = workingString + ch;
                     currentState = currentState.transition(line.charAt(charCount));
                 }
-                
+
                 // Prepare for next line
                 lineCount = lineCount + 1;
             }

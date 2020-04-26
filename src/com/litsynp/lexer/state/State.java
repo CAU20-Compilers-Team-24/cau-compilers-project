@@ -24,20 +24,20 @@ public enum State {
 	VAR_TYPE_Q8_b,
 	VAR_TYPE_Q9_o,
 	VAR_TYPE_Q10_o,
-	VAR_TYPE_Q11(true, TokenType.VARIABLE_TYPE),
+	VAR_TYPE_Q11(TokenType.VARIABLE_TYPE),
 	
 	// Operators
-	ARITHMETIC_OP_Q0(true, TokenType.ARITHMETIC_OP),
-	ARITHMETIC_OP_Q1(true, TokenType.ARITHMETIC_OP),
+	ARITHMETIC_OP_Q0(TokenType.ARITHMETIC_OP),
+	ARITHMETIC_OP_Q1(TokenType.ARITHMETIC_OP),
 	
-	BITWISE_OP_Q0(true, TokenType.BITWISE_OP),
+	BITWISE_OP_Q0(TokenType.BITWISE_OP),
 	
 	COMPARISON_OP_Q0,
-	COMPARISON_OP_Q1(true, TokenType.COMP_OP),
-	COMPARISON_OP_Q2(true, TokenType.COMP_OP),
-	COMPARISON_OP_Q3(true, TokenType.COMP_OP),
+	COMPARISON_OP_Q1(TokenType.COMP_OP),
+	COMPARISON_OP_Q2(TokenType.COMP_OP),
+	COMPARISON_OP_Q3(TokenType.COMP_OP),
 	
-	ASSIGN_OP_Q0(true, TokenType.ASSIGN_OP),
+	ASSIGN_OP_Q0(TokenType.ASSIGN_OP),
 	
 	// Boolean strings
 	BOOLEAN_STRING_Q0_t,
@@ -46,7 +46,7 @@ public enum State {
 	
 	BOOLEAN_STRING_Q3_a,
 	BOOLEAN_STRING_Q4_l,
-	BOOLEAN_STRING_Q5(true, TokenType.BOOLEAN_STRING),
+	BOOLEAN_STRING_Q5(TokenType.BOOLEAN_STRING),
 	
 	// Statements
 	STATEMENT_Q0_e,
@@ -64,27 +64,23 @@ public enum State {
 	STATEMENT_Q10_r,
 	
 	STATEMENT_Q11_o,
-	STATEMENT_Q12(true, TokenType.STATEMENT),
+	STATEMENT_Q12(TokenType.STATEMENT),
 
 	// Numbers
 	SIGNED_ICONST_Q0,
-	SIGNED_ICONST_Q1(true, TokenType.SIGNED_ICONST),
-	SIGNED_ICONST_Q2(true, TokenType.SIGNED_ICONST),
+	SIGNED_ICONST_Q1(TokenType.SIGNED_ICONST),
+	SIGNED_ICONST_Q2(TokenType.SIGNED_ICONST),
 	
 	FCONST_Q0,
 	FCONST_Q1,
-	FCONST_Q2(true, TokenType.FCONST),
+	FCONST_Q2(TokenType.FCONST),
 	
 	// Not accepted
-	NOT_ACCEPTED(true, TokenType.NOT_ACCEPTED);
-	
-	/**
-	 * The boolean for whether the state is a final state.
-	 */
-	boolean isFinalState;
+	NOT_ACCEPTED(TokenType.NOT_ACCEPTED);
 	
 	/**
 	 * Predicted token type of the current state if the transition ends there.
+	 * If tokenType is not NOT_YET_A_TOKEN, it means this is a final state.
 	 */
 	TokenType tokenType;
 	
@@ -92,7 +88,6 @@ public enum State {
 	 * Creates a new non-final state.
 	 */
 	State() {
-		this.isFinalState = false;
 		this.tokenType = TokenType.NOT_YET_A_TOKEN;
 	}
 	
@@ -102,8 +97,7 @@ public enum State {
 	 * @param isFinalState whether the state is a final state
 	 * @param tokenType	   token type of the state if it is finally accepted and put into a symbol table
 	 */
-	private State(boolean isFinalState, TokenType tokenType) {
-		this.isFinalState = isFinalState;
+	private State(TokenType tokenType) {
 		this.tokenType = tokenType;
 	}
 	
@@ -113,7 +107,7 @@ public enum State {
 	 * @return Boolean value of whether the state is a final state
 	 */
 	public boolean isAccepted() {
-		return this.isFinalState;
+		return (tokenType != TokenType.NOT_YET_A_TOKEN);
 	}
 	
 	/**

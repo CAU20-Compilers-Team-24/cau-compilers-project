@@ -1,6 +1,7 @@
 package com.litsynp.lexer;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -23,9 +24,9 @@ public class LexicalAnalyzer {
      * Lexically analyzes an input file line by line and character by character to
      * tokenize it into a symbol table.
      * 
-     * @param fileName the input file name to read
+     * @param inputFile the input file to read
      */
-    public static void lex(String fileName) {
+    public static void lex(File inputFile) {
 
         // Symbol Table
         SymbolTable symtab = new SymbolTable();
@@ -34,7 +35,7 @@ public class LexicalAnalyzer {
 
         try {
             // Create input stream
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
 
             // String of the one whole line
             String line;
@@ -131,21 +132,37 @@ public class LexicalAnalyzer {
         } catch (IOException e) {
             System.out.println(e);
         } catch (NullTokenException e) {
-            System.out.println(e + " at character " + charCount + " in line " + (lineCount + 1) + " in " + fileName);
+            System.out.println(
+                    e + " at character " + charCount + " in line " + (lineCount + 1) + " in " + inputFile.getName());
             System.exit(1);
         }
 
-        System.out.println("\nRead " + lineCount + " line(s) from the file \"" + fileName + "\".");
+        System.out.println("\nRead " + lineCount + " line(s) from the file \"" + inputFile.getPath() + "\".");
 
         // Print information in symbol table
         symtab.printTable();
 
         // Print symbol table to a file
         try {
-            PrintStream out = new PrintStream(new FileOutputStream("files\\output.txt"));
+            String inputFilePath = inputFile.getPath();
+            int pos = inputFilePath.lastIndexOf(".");
+            if (pos > 0 && pos < (inputFilePath.length() - 1)) { // If '.' is not the first or last character.
+                inputFilePath = inputFilePath.substring(0, pos);
+            }
+
+            File outputFile = new File(inputFilePath + ".out");
+
+            /*
+             * Print the symbol table to the output file and set the output stream back to
+             * console standard output
+             */
+            PrintStream stdout = System.out;
+            PrintStream out = new PrintStream(new FileOutputStream(outputFile));
             System.setOut(out);
             symtab.printTable();
-            System.setOut(System.out);
+            System.setOut(stdout);
+
+            System.out.println("Output file is generated in \"" + outputFile.getPath() + "\".");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -129,8 +129,10 @@ public class LexicalAnalyzer {
 
         } catch (FileNotFoundException e) {
             System.out.println(e);
+            System.exit(1);
         } catch (IOException e) {
             System.out.println(e);
+            System.exit(1);
         } catch (NullTokenException e) {
             System.out.println(
                     e + " at character " + charCount + " in line " + (lineCount + 1) + " in " + inputFile.getName());
@@ -164,7 +166,8 @@ public class LexicalAnalyzer {
 
             System.out.println("Output file is generated in \"" + outputFile.getPath() + "\".");
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e);
+            System.exit(1);
         }
     }
 }

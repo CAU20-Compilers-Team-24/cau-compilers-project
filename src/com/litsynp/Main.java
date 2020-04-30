@@ -12,7 +12,7 @@ public class Main {
     /**
      * Main method of the compiler program.
      * 
-     * @param args args[1] contains the input file path (default: "files/input.txt")
+     * @param args args[1] contains the input file path (default: "files/a.txt")
      */
     public static void main(String[] args) {
         
@@ -24,7 +24,7 @@ public class Main {
             fileName = args[0];
         } else {
             // Default input file name
-            fileName = "files\\a.txt";
+            fileName = "files" + File.separator + "a.txt";
         }
 
         // Lexically analyze the input file

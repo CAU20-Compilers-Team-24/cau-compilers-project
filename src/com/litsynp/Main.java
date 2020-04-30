@@ -24,7 +24,7 @@ public class Main {
             fileName = args[0];
         } else {
             // Default input file name
-            fileName = "files" + File.separator + "a.txt";
+            fileName = "files" + File.separator + "a.c";
         }
 
         // Lexically analyze the input file

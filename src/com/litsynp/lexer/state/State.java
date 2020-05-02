@@ -155,6 +155,23 @@ public enum State {
     public boolean isLetter(char ch) {
         return Character.isLetter(ch);
     }
+    
+    /**
+     * Returns whether a given character is considered a whitespace.
+     * 
+     * @param ch the candidate for a whitespace
+     * @return boolean value of whether the given character is a whitespace
+     */
+    public static boolean isWhitespace(char ch) {
+        switch (ch) {
+        case ' ':
+        case '\t':
+        case '\n':
+            return true;
+        default:
+            return false;
+        }
+    }
 
     /**
      * Returns whether a given character is a non-zero digit [1-9]
@@ -164,16 +181,6 @@ public enum State {
      */
     public boolean isNonZeroDigit(char ch) {
         return Character.isDigit(ch) && (ch != '0');
-    }
-    
-    /**
-     * Returns whether a given character is considered a whitespace ' '|'\t'|'\n'
-     * 
-     * @param ch character to test whether it is considered a whitespace
-     * @return boolean value of whether <b>ch</> is a whitespace
-     */
-    public boolean isWhitespace(char ch) {
-        return (ch == ' ' || ch == '\t' || ch == '\n');
     }
 
     /**
@@ -191,280 +198,280 @@ public enum State {
 
         // Starting state
         case START:
-            if (input == 'f')                     return VAR_TYPE_Q0_f;
-            else if (input == 'i')                return VAR_TYPE_Q3_i;
-            else if (input == 'c')                return VAR_TYPE_Q5_c;
-            else if (input == 'b')                return VAR_TYPE_Q8_b;
-            else if (input == 'e')                return STATEMENT_Q0_e;
-            else if (input == 'w')                return STATEMENT_Q2_w;
-            else if (input == 'r')                return STATEMENT_Q6_r;
-            else if (input == 't')                return BOOLEAN_STRING_Q0_t;
-            else if (input == '(')                return LPAREN_Q0;
-            else if (input == ')')                return RPAREN_Q0;
-            else if (input == ',')                return COMMA_Q0;
-            else if (input == ';')                return SEMI_Q0;
-            else if (input == '-')                return ARITHMETIC_OP_Q0;
+            if (input == 'f')                               return VAR_TYPE_Q0_f;
+            else if (input == 'i')                          return VAR_TYPE_Q3_i;
+            else if (input == 'c')                          return VAR_TYPE_Q5_c;
+            else if (input == 'b')                          return VAR_TYPE_Q8_b;
+            else if (input == 'e')                          return STATEMENT_Q0_e;
+            else if (input == 'w')                          return STATEMENT_Q2_w;
+            else if (input == 'r')                          return STATEMENT_Q6_r;
+            else if (input == 't')                          return BOOLEAN_STRING_Q0_t;
+            else if (input == '(')                          return LPAREN_Q0;
+            else if (input == ')')                          return RPAREN_Q0;
+            else if (input == ',')                          return COMMA_Q0;
+            else if (input == ';')                          return SEMI_Q0;
+            else if (input == '-')                          return ARITHMETIC_OP_Q0;
             else if (input == '+'
                     || input == '*'
-                    || input == '/')              return ARITHMETIC_OP_Q1;
+                    || input == '/')                        return ARITHMETIC_OP_Q1;
             else if (input == '&'
-                    || input == '|')              return BITWISE_OP_Q0;
-            else if (input == '!')                return COMPARISON_OP_Q0;
-            else if (input == '<')                return COMPARISON_OP_Q1;
-            else if (input == '>')                return COMPARISON_OP_Q2;
-            else if (input == '=')                return ASSIGN_OP_Q0;
-            else if (input == '0')                return SIGNED_ICONST_Q1;
-            else if (isNonZeroDigit(input))       return SIGNED_ICONST_Q2;
-            else if (input == '"')                return LITERAL_STRING_Q0;
+                    || input == '|')                        return BITWISE_OP_Q0;
+            else if (input == '!')                          return COMPARISON_OP_Q0;
+            else if (input == '<')                          return COMPARISON_OP_Q1;
+            else if (input == '>')                          return COMPARISON_OP_Q2;
+            else if (input == '=')                          return ASSIGN_OP_Q0;
+            else if (input == '0')                          return SIGNED_ICONST_Q1;
+            else if (isNonZeroDigit(input))                 return SIGNED_ICONST_Q2;
+            else if (input == '"')                          return LITERAL_STRING_Q0;
             else if (isLetter(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
 
             // Variable types
         case VAR_TYPE_Q0_f:
-            if (input == 'l')                     return VAR_TYPE_Q1_l;
-            else if (input == 'o')                return STATEMENT_Q11_o;
-            else if (input == 'a')                return BOOLEAN_STRING_Q3_a;
+            if (input == 'l')                               return VAR_TYPE_Q1_l;
+            else if (input == 'o')                          return STATEMENT_Q11_o;
+            else if (input == 'a')                          return BOOLEAN_STRING_Q3_a;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case VAR_TYPE_Q1_l:
-            if (input == 'o')                     return VAR_TYPE_Q2_o;
+            if (input == 'o')                               return VAR_TYPE_Q2_o;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case VAR_TYPE_Q2_o:
-            if (input == 'a')                     return VAR_TYPE_Q4_n;
+            if (input == 'a')                               return VAR_TYPE_Q4_n;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
 
         case VAR_TYPE_Q3_i:
-            if (input == 'n')                     return VAR_TYPE_Q4_n;
-            else if (input == 'f')                return STATEMENT_Q12;
+            if (input == 'n')                               return VAR_TYPE_Q4_n;
+            else if (input == 'f')                          return STATEMENT_Q12;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case VAR_TYPE_Q4_n:
-            if (input == 't')                     return VAR_TYPE_Q11;
+            if (input == 't')                               return VAR_TYPE_Q11;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
 
         case VAR_TYPE_Q5_c:
-            if (input == 'h')                     return VAR_TYPE_Q6_h;
+            if (input == 'h')                               return VAR_TYPE_Q6_h;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case VAR_TYPE_Q6_h:
-            if (input == 'a')                     return VAR_TYPE_Q7_a;
+            if (input == 'a')                               return VAR_TYPE_Q7_a;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case VAR_TYPE_Q7_a:
-            if (input == 'r')                     return VAR_TYPE_Q11;
+            if (input == 'r')                               return VAR_TYPE_Q11;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
 
         case VAR_TYPE_Q8_b:
-            if (input == 'o')                     return VAR_TYPE_Q9_o;
+            if (input == 'o')                               return VAR_TYPE_Q9_o;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case VAR_TYPE_Q9_o:
-            if (input == 'o')                     return VAR_TYPE_Q10_o;
+            if (input == 'o')                               return VAR_TYPE_Q10_o;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case VAR_TYPE_Q10_o:
-            if (input == 'l')                     return VAR_TYPE_Q11;
+            if (input == 'l')                               return VAR_TYPE_Q11;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
 
             // Operators
         case ARITHMETIC_OP_Q0:
-            if (input == '0')                     return SIGNED_ICONST_Q0;
-            else if (isNonZeroDigit(input))       return SIGNED_ICONST_Q2;
-            else                                  return NOT_ACCEPTED;
+            if (input == '0')                               return SIGNED_ICONST_Q0;
+            else if (isNonZeroDigit(input))                 return SIGNED_ICONST_Q2;
+            else                                            return NOT_ACCEPTED;
         case COMPARISON_OP_Q0:
-            if (input == '=')                     return COMPARISON_OP_Q3;
-            else                                  return NOT_ACCEPTED;
+            if (input == '=')                               return COMPARISON_OP_Q3;
+            else                                            return NOT_ACCEPTED;
         case COMPARISON_OP_Q1:
-            if (input == '=')                     return COMPARISON_OP_Q3;
-            else if (input == '<')                return BITWISE_OP_Q0;
-            else                                  return NOT_ACCEPTED;
+            if (input == '=')                               return COMPARISON_OP_Q3;
+            else if (input == '<')                          return BITWISE_OP_Q0;
+            else                                            return NOT_ACCEPTED;
         case COMPARISON_OP_Q2:
-            if (input == '=')                     return COMPARISON_OP_Q3;
-            else if (input == '>')                return BITWISE_OP_Q0;
-            else                                  return NOT_ACCEPTED;
+            if (input == '=')                               return COMPARISON_OP_Q3;
+            else if (input == '>')                          return BITWISE_OP_Q0;
+            else                                            return NOT_ACCEPTED;
         case ASSIGN_OP_Q0:
-            if (input == '=')                     return COMPARISON_OP_Q3;
-            else                                  return NOT_ACCEPTED;
+            if (input == '=')                               return COMPARISON_OP_Q3;
+            else                                            return NOT_ACCEPTED;
 
             // Statements
         case STATEMENT_Q0_e:
-            if (input == 'l')                     return STATEMENT_Q1_l;
+            if (input == 'l')                               return STATEMENT_Q1_l;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case STATEMENT_Q1_l:
-            if (input == 's')                     return STATEMENT_Q5_l;
+            if (input == 's')                               return STATEMENT_Q5_l;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
 
         case STATEMENT_Q2_w:
-            if (input == 'h')                     return STATEMENT_Q3_h;
+            if (input == 'h')                               return STATEMENT_Q3_h;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case STATEMENT_Q3_h:
-            if (input == 'i')                     return STATEMENT_Q4_i;
+            if (input == 'i')                               return STATEMENT_Q4_i;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case STATEMENT_Q4_i:
-            if (input == 'l')                     return STATEMENT_Q5_l;
+            if (input == 'l')                               return STATEMENT_Q5_l;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case STATEMENT_Q5_l:
-            if (input == 'e')                     return STATEMENT_Q12;
+            if (input == 'e')                               return STATEMENT_Q12;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
 
         case STATEMENT_Q6_r:
-            if (input == 'e')                     return STATEMENT_Q7_e;
+            if (input == 'e')                               return STATEMENT_Q7_e;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case STATEMENT_Q7_e:
-            if (input == 't')                     return STATEMENT_Q8_t;
+            if (input == 't')                               return STATEMENT_Q8_t;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case STATEMENT_Q8_t:
-            if (input == 'u')                     return STATEMENT_Q9_u;
+            if (input == 'u')                               return STATEMENT_Q9_u;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case STATEMENT_Q9_u:
-            if (input == 'r')                     return STATEMENT_Q10_r;
+            if (input == 'r')                               return STATEMENT_Q10_r;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case STATEMENT_Q10_r:
-            if (input == 'n')                     return STATEMENT_Q12;
+            if (input == 'n')                               return STATEMENT_Q12;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
 
         case STATEMENT_Q11_o:
-            if (input == 'r')                     return STATEMENT_Q12;
+            if (input == 'r')                               return STATEMENT_Q12;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
 
             // Boolean strings
         case BOOLEAN_STRING_Q0_t:
-            if (input == 'r')                     return BOOLEAN_STRING_Q1_r;
+            if (input == 'r')                               return BOOLEAN_STRING_Q1_r;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case BOOLEAN_STRING_Q1_r:
-            if (input == 'u')                     return BOOLEAN_STRING_Q2_u;
+            if (input == 'u')                               return BOOLEAN_STRING_Q2_u;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case BOOLEAN_STRING_Q2_u:
-            if (input == 'e')                     return BOOLEAN_STRING_Q5;
+            if (input == 'e')                               return BOOLEAN_STRING_Q5;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case BOOLEAN_STRING_Q3_a:
-            if (input == 'l')                     return BOOLEAN_STRING_Q4_l;
+            if (input == 'l')                               return BOOLEAN_STRING_Q4_l;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
         case BOOLEAN_STRING_Q4_l:
-            if (input == 's')                     return BOOLEAN_STRING_Q2_u;
+            if (input == 's')                               return BOOLEAN_STRING_Q2_u;
             else if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
 
         case SIGNED_ICONST_Q0:
-            if (input == '.')                     return FCONST_Q0;
-            else                                  return NOT_ACCEPTED;
+            if (input == '.')                               return FCONST_Q0;
+            else                                            return NOT_ACCEPTED;
         case SIGNED_ICONST_Q1:
-            if (input == '.')                     return FCONST_Q0;
-            else                                  return NOT_ACCEPTED;
+            if (input == '.')                               return FCONST_Q0;
+            else                                            return NOT_ACCEPTED;
         case SIGNED_ICONST_Q2:
-            if (input == '.')                     return FCONST_Q0;
-            else if (isDigit(input))              return SIGNED_ICONST_Q2;
-            else                                  return NOT_ACCEPTED;
+            if (input == '.')                               return FCONST_Q0;
+            else if (isDigit(input))                        return SIGNED_ICONST_Q2;
+            else                                            return NOT_ACCEPTED;
 
             // Constant numbers
         case FCONST_Q0:
-            if (isDigit(input))                   return FCONST_Q2;
-            else                                  return NOT_ACCEPTED;
+            if (isDigit(input))                             return FCONST_Q2;
+            else                                            return NOT_ACCEPTED;
         case FCONST_Q1:
-            if (input == '0')                     return FCONST_Q1;
-            else if (isNonZeroDigit(input))       return FCONST_Q2;
-            else                                  return NOT_ACCEPTED;
+            if (input == '0')                               return FCONST_Q1;
+            else if (isNonZeroDigit(input))                 return FCONST_Q2;
+            else                                            return NOT_ACCEPTED;
         case FCONST_Q2:
-            if (input == '0')                     return FCONST_Q1;
-            else if (isNonZeroDigit(input))       return FCONST_Q2;
-            else                                  return NOT_ACCEPTED;
+            if (input == '0')                               return FCONST_Q1;
+            else if (isNonZeroDigit(input))                 return FCONST_Q2;
+            else                                            return NOT_ACCEPTED;
 
             // Literal string
         case LITERAL_STRING_Q0:
-            if (isDigit(input))                   return LITERAL_STRING_Q0;
-            else if (isLetter(input))             return LITERAL_STRING_Q0;
-            else if (isWhitespace(input))         return LITERAL_STRING_Q0;
-            else if (input == '"')                return LITERAL_STRING_Q1;
-            else                                  return NOT_ACCEPTED;
+            if (isDigit(input))                             return LITERAL_STRING_Q0;
+            else if (isLetter(input))                       return LITERAL_STRING_Q0;
+            else if (isWhitespace(input))                   return LITERAL_STRING_Q0;
+            else if (input == '"')                          return LITERAL_STRING_Q1;
+            else                                            return NOT_ACCEPTED;
             
             // Identifier
         case IDENTIFIER_Q0:
             if (isLetter(input)
                     || isDigit(input)
-                    || (input == '_'))            return IDENTIFIER_Q0;
-            else                                  return NOT_ACCEPTED;
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return NOT_ACCEPTED;
             
             // Not accepted
         default:
-            return NOT_ACCEPTED;
+                                                            return NOT_ACCEPTED;
         }
     }
 }

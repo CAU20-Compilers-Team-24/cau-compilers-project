@@ -64,4 +64,35 @@ public class Token {
     public void setValue(String value) {
         this.value = value;
     }
+
+    /**
+     * Returns a boolean value of whether the token is a negative number.
+     * <p>
+     * "Number" means having a token type of either a signed integer constant
+     * (SIGNED_ICONST) or a float constant (FCONST).
+     * 
+     * @return boolean value of whether the token is a negative number
+     */
+    public boolean isNegativeNumber() {
+        if ((this.getName() == TokenType.SIGNED_ICONST || this.getName() == TokenType.FCONST)
+                && (this.getValue().charAt(0) == '-')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns a boolean value of whether the token is a number or identifier.
+     * <p>
+     * Identifier means having a token type of IDENTIFIER. Number means having a
+     * token type of either a signed integer constant (SIGNED_ICONST) or a float
+     * constant (FCONST).
+     * 
+     * @return boolean value of whether the token is a number or identifier
+     */
+    public boolean isNumberOrID() {
+        return (this.getName() == TokenType.SIGNED_ICONST || this.getName() == TokenType.FCONST
+                || this.getName() == TokenType.IDENTIFIER);
+    }
 }

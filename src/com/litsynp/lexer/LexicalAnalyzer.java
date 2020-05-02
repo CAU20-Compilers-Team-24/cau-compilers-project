@@ -81,7 +81,7 @@ public class LexicalAnalyzer {
                     System.out.println(String.format("[Line %3d] %3d", lineCount + 1, charCount)
                             + "th character|Read character:\'" + ch + "\'|Current String:" + workingString);
 
-                    if ((workingString.equals("") || workingString.equals(" ")) && TokenType.isWhitespace(ch)) {
+                    if ((workingString.equals("") || workingString.equals(" ")) && State.isWhitespace(ch)) {
                         // No interesting input received
                         continue;
                     }
@@ -134,8 +134,8 @@ public class LexicalAnalyzer {
             System.out.println(e);
             System.exit(1);
         } catch (NullTokenException e) {
-            System.out.println(
-                    e + " at character " + charCount + " in line " + (lineCount + 1) + " in " + inputFile.getName());
+            System.out.println(e + " at character " + charCount + " in line " + (lineCount + 1) + " in "
+                    + inputFile.getName());
             System.exit(1);
         }
 

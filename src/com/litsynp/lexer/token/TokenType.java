@@ -58,23 +58,6 @@ public enum TokenType {
     }
 
     /**
-     * Returns whether a given character is considered a whitespace.
-     * 
-     * @param ch the candidate for a whitespace
-     * @return boolean value of whether the given character is a whitespace
-     */
-    public static boolean isWhitespace(char ch) {
-        switch (ch) {
-        case ' ':
-        case '\t':
-        case '\n':
-            return true;
-        default:
-            return false;
-        }
-    }
-
-    /**
      * Returns whether a given character is considered a delimiter.
      * 
      * @param ch the candidate for a delimiter

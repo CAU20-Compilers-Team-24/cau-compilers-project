@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 
 import com.litsynp.lexer.state.State;
 import com.litsynp.lexer.token.NullTokenException;
@@ -166,13 +167,16 @@ public class LexicalAnalyzer {
              * console standard output
              */
             PrintStream stdout = System.out;
-            PrintStream out = new PrintStream(new FileOutputStream(outputFile));
+            PrintStream out = new PrintStream(new FileOutputStream(outputFile), false, "UTF-8");
             System.setOut(out);
             symtab.printTable();
             System.setOut(stdout);
 
             System.out.println("Output file is generated in \"" + outputFile.getPath() + "\".");
         } catch (FileNotFoundException e) {
+            System.out.println(e);
+            System.exit(1);
+        } catch (UnsupportedEncodingException e) {
             System.out.println(e);
             System.exit(1);
         }

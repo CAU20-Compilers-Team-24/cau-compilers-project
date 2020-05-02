@@ -112,12 +112,19 @@ public class LexicalAnalyzer {
                             currentState = currentState.transition(line.charAt(charCount));
                         }
                     } else { // Within double quotes
-                        workingString += ch;
-                        currentState = currentState.transition(line.charAt(charCount));
-
-                        if (ch == '"') { // Closing double quote
-                            isStringLiteral = false;
+                        if (isLastCharacter) {
+                            // Within double quotes but line is at the end
+                            currentState = State.NOT_ACCEPTED;
+                            symtab.put(new Token(currentState.getTokenType(), workingString));
+                        } else {
+                            workingString += ch;
+                            currentState = currentState.transition(line.charAt(charCount));
+                            
+                            if (ch == '"') { // Closing double quote
+                                isStringLiteral = false;
+                            }
                         }
+
                     }
                 }
 

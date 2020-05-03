@@ -109,16 +109,16 @@ public class SymbolTable {
      * Prints all of the tokens in the symbol table in a readable format
      */
     public void printTable() {
-        System.out.println("┌────────────────────────────┬────────────────────────────┐"); // 1 + 28 + 1 + 28 + 1
+        System.out.println("+------------------------------+------------------------------+"); // 1 + 30 + 1 + 30 + 1
 
-        System.out.println(String.format("│%-28s│%-28s│", "Token Name", "Token Value"));
+        System.out.println(String.format("| %-28s | %-28s |", "Token Name", "Token Value"));
 
         for (int i = 0; i < tokens.size(); i++) {
             Token token = tokens.get(i); // Print i'th token in the symbol table
-            System.out.println("├────────────────────────────┼────────────────────────────┤");
-            System.out.println(String.format("│%-28s│%-28s│", token.getName(), token.getValue()));
+            System.out.println("+------------------------------+------------------------------+");
+            System.out.println(String.format("| %-28s | %-28s |", token.getName(), token.getValue()));
         }
 
-        System.out.println("└────────────────────────────┴────────────────────────────┘");
+        System.out.println("+------------------------------+------------------------------+");
     }
 }

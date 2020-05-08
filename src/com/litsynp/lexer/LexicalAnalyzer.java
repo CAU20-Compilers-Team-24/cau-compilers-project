@@ -63,7 +63,7 @@ public class LexicalAnalyzer {
 
                     // Transition
                     currentState = currentState.transition(ch);
-                    
+
                     // If accepted
                     if (currentState.isAccepted()) {
                         symtab.put(new Token(currentState.getTokenType(), workingString, lineCount));
@@ -76,7 +76,14 @@ public class LexicalAnalyzer {
                         workingString += ch;
                     }
                 }
-                
+
+                // Check if the token still has not been made at the end
+                if (workingString.length() > 0 && !workingString.equals(" ")
+                        && (currentState.getTokenType() == TokenType.NOT_YET_A_TOKEN
+                        || currentState.getTokenType() == TokenType.NOT_ACCEPTED)) {
+                    throw new NullTokenException("Input \"" + workingString + "\" not accepted");
+                }
+
                 // Prepare for next line
                 lineCount = lineCount + 1;
             }

@@ -11,83 +11,109 @@ public enum State {
     START,
 
     // Variable types
-    VAR_TYPE_Q0_f(TokenType.IDENTIFIER),
-    VAR_TYPE_Q1_l(TokenType.IDENTIFIER),
-    VAR_TYPE_Q2_o(TokenType.IDENTIFIER),
+    VAR_TYPE_Q0_f,
+    VAR_TYPE_Q1_l,
+    VAR_TYPE_Q2_o,
 
-    VAR_TYPE_Q3_i(TokenType.IDENTIFIER),
-    VAR_TYPE_Q4_n(TokenType.IDENTIFIER),
+    VAR_TYPE_Q3_i,
+    VAR_TYPE_Q4_n,
 
-    VAR_TYPE_Q5_c(TokenType.IDENTIFIER),
-    VAR_TYPE_Q6_h(TokenType.IDENTIFIER),
-    VAR_TYPE_Q7_a(TokenType.IDENTIFIER),
+    VAR_TYPE_Q5_c,
+    VAR_TYPE_Q6_h,
+    VAR_TYPE_Q7_a,
 
-    VAR_TYPE_Q8_b(TokenType.IDENTIFIER),
-    VAR_TYPE_Q9_o(TokenType.IDENTIFIER),
-    VAR_TYPE_Q10_o(TokenType.IDENTIFIER),
-    VAR_TYPE_Q11(TokenType.VARIABLE_TYPE),
+    VAR_TYPE_Q8_b,
+    VAR_TYPE_Q9_o,
+    VAR_TYPE_Q10_o,
+    VAR_TYPE_Q11,
+    VAR_TYPE_F(TokenType.VARIABLE_TYPE),
 
     // Parentheses, braces, comma and semicolon
-    LPAREN_Q0(TokenType.LPAREN),
-    RPAREN_Q0(TokenType.RPAREN),
-    COMMA_Q0(TokenType.COMMA),
-    SEMI_Q0(TokenType.SEMI),
+    LPAREN_Q0,
+    LPAREN_F(TokenType.LPAREN),
+    
+    RPAREN_Q0,
+    RPAREN_F(TokenType.RPAREN),
+
+    LBRACE_Q0,
+    LBRACE_F(TokenType.LBRACE),
+    
+    RBRACE_Q0,
+    RBRACE_F(TokenType.RBRACE),
+    
+    COMMA_Q0,
+    COMMA_F(TokenType.COMMA),
+    
+    SEMI_Q0,
+    SEMI_F(TokenType.SEMI),
 
     // Operators
-    ARITHMETIC_OP_Q0(TokenType.ARITHMETIC_OP),
-    ARITHMETIC_OP_Q1(TokenType.ARITHMETIC_OP),
+    ARITHMETIC_OP_Q0,
+    ARITHMETIC_OP_F(TokenType.ARITHMETIC_OP),
 
-    BITWISE_OP_Q0(TokenType.BITWISE_OP),
+    BITWISE_OP_Q0,
+    BITWISE_OP_F(TokenType.BITWISE_OP),
 
     COMPARISON_OP_Q0,
-    COMPARISON_OP_Q1(TokenType.COMP_OP),
-    COMPARISON_OP_Q2(TokenType.COMP_OP),
-    COMPARISON_OP_Q3(TokenType.COMP_OP),
+    COMPARISON_OP_Q1,
+    COMPARISON_OP_Q2,
+    COMPARISON_OP_Q3,
+    COMPARISON_OP_F(TokenType.COMP_OP),
 
-    ASSIGN_OP_Q0(TokenType.ASSIGN_OP),
+    ASSIGN_OP_Q0,
+    ASSIGN_OP_F(TokenType.ASSIGN_OP),
 
     // Boolean strings
-    BOOLEAN_STRING_Q0_t(TokenType.IDENTIFIER),
-    BOOLEAN_STRING_Q1_r(TokenType.IDENTIFIER),
-    BOOLEAN_STRING_Q2_u(TokenType.IDENTIFIER),
+    BOOLEAN_STRING_Q0_t,
+    BOOLEAN_STRING_Q1_r,
+    BOOLEAN_STRING_Q2_u,
 
-    BOOLEAN_STRING_Q3_a(TokenType.IDENTIFIER),
-    BOOLEAN_STRING_Q4_l(TokenType.IDENTIFIER),
-    BOOLEAN_STRING_Q5(TokenType.BOOLEAN_STRING),
+    BOOLEAN_STRING_Q3_a,
+    BOOLEAN_STRING_Q4_l,
+    BOOLEAN_STRING_Q5,
+    BOOLEAN_STRING_F(TokenType.BOOLEAN_STRING),
 
     // Statements
-    STATEMENT_Q0_e(TokenType.IDENTIFIER),
-    STATEMENT_Q1_l(TokenType.IDENTIFIER),
+    STATEMENT_Q0_e,
+    STATEMENT_Q1_l,
 
-    STATEMENT_Q2_w(TokenType.IDENTIFIER),
-    STATEMENT_Q3_h(TokenType.IDENTIFIER),
-    STATEMENT_Q4_i(TokenType.IDENTIFIER),
-    STATEMENT_Q5_l(TokenType.IDENTIFIER),
+    STATEMENT_Q2_w,
+    STATEMENT_Q3_h,
+    STATEMENT_Q4_i,
+    STATEMENT_Q5_l,
 
-    STATEMENT_Q6_r(TokenType.IDENTIFIER),
-    STATEMENT_Q7_e(TokenType.IDENTIFIER),
-    STATEMENT_Q8_t(TokenType.IDENTIFIER),
-    STATEMENT_Q9_u(TokenType.IDENTIFIER),
-    STATEMENT_Q10_r(TokenType.IDENTIFIER),
+    STATEMENT_Q6_r,
+    STATEMENT_Q7_e,
+    STATEMENT_Q8_t,
+    STATEMENT_Q9_u,
+    STATEMENT_Q10_r,
 
-    STATEMENT_Q11_o(TokenType.IDENTIFIER),
-    STATEMENT_Q12(TokenType.STATEMENT),
+    STATEMENT_Q11_o,
+    STATEMENT_Q12,
+    STATEMENT_F(TokenType.STATEMENT),
 
     // Numbers
     SIGNED_ICONST_Q0,
-    SIGNED_ICONST_Q1(TokenType.SIGNED_ICONST),
-    SIGNED_ICONST_Q2(TokenType.SIGNED_ICONST),
+    SIGNED_ICONST_Q1,
+    SIGNED_ICONST_F(TokenType.SIGNED_ICONST),
 
     FCONST_Q0,
     FCONST_Q1,
-    FCONST_Q2(TokenType.FCONST),
+    FCONST_Q2,
+    FCONST_F(TokenType.FCONST),
     
     // Literal string
     LITERAL_STRING_Q0,
-    LITERAL_STRING_Q1(TokenType.LITERAL_STRING),
+    LITERAL_STRING_Q1,
+    LITERAL_STRING_F(TokenType.LITERAL_STRING),
     
     // Identifier
-    IDENTIFIER_Q0(TokenType.IDENTIFIER),
+    IDENTIFIER_Q0,
+    IDENTIFIER_F(TokenType.IDENTIFIER),
+    
+    // Whitespace
+    WHITESPACE_Q0,
+    WHITESPACE_F(TokenType.WHITESPACE),
 
     // Not accepted
     NOT_ACCEPTED(TokenType.NOT_ACCEPTED);
@@ -182,6 +208,57 @@ public enum State {
     public boolean isNonZeroDigit(char ch) {
         return Character.isDigit(ch) && (ch != '0');
     }
+    
+    /**
+     * Returns whether a given character belongs to the alphabet of automata
+     * 
+     * @param ch character to test whether it belongs to the alphabet of automata
+     * @return boolean value of whether <b>ch</b> belongs to the alphabet of automata
+     */
+    public boolean isAlphabet(char ch) {
+        String otherAlphabet = "-+*/=!<>&|(){},;.";
+        
+        if (isWhitespace(ch) || isLetter(ch) || isDigit(ch)) {
+            return true;
+        } else {
+            for (int i = 0; i < otherAlphabet.length(); i++) {
+                if (ch == otherAlphabet.charAt(i)) {
+                    return true;
+                }
+            }
+            if (ch == '\"') {
+                return true;
+            }
+            
+            return false;
+        }
+    }
+    
+    /**
+     * Returns whether a given character belongs to the alphabet of automata except '.' character
+     * 
+     * @param ch character to test whether it belongs to the alphabet of automata except '.' character
+     * @return boolean value of whether <b>ch</b> belongs to the alphabet of automata except '.' character
+     */
+    public boolean isAlphabetExceptDot(char ch) {
+        String otherAlphabet = "-+*/=!<>&|(){},;";
+        
+        if (isWhitespace(ch) || isLetter(ch) || isDigit(ch)) {
+            return true;
+        } else {
+            for (int i = 0; i < otherAlphabet.length(); i++) {
+                if (ch == otherAlphabet.charAt(i)) {
+                    return true;
+                }
+            }
+            if (ch == '\"') {
+                return true;
+            }
+            
+            return false;
+        }
+    }
+    
 
     /**
      * Transitions a state with input to a new state.
@@ -208,23 +285,26 @@ public enum State {
             else if (input == 't')                          return BOOLEAN_STRING_Q0_t;
             else if (input == '(')                          return LPAREN_Q0;
             else if (input == ')')                          return RPAREN_Q0;
+            else if (input == '{')                          return LBRACE_Q0;
+            else if (input == '}')                          return RBRACE_Q0;
             else if (input == ',')                          return COMMA_Q0;
             else if (input == ';')                          return SEMI_Q0;
-            else if (input == '-')                          return ARITHMETIC_OP_Q0;
-            else if (input == '+'
+            else if (input == '-'
+                    || input == '+'
                     || input == '*'
-                    || input == '/')                        return ARITHMETIC_OP_Q1;
+                    || input == '/')                        return ARITHMETIC_OP_Q0;
             else if (input == '&'
                     || input == '|')                        return BITWISE_OP_Q0;
             else if (input == '!')                          return COMPARISON_OP_Q0;
             else if (input == '<')                          return COMPARISON_OP_Q1;
             else if (input == '>')                          return COMPARISON_OP_Q2;
             else if (input == '=')                          return ASSIGN_OP_Q0;
-            else if (input == '0')                          return SIGNED_ICONST_Q1;
-            else if (isNonZeroDigit(input))                 return SIGNED_ICONST_Q2;
+            else if (input == '0')                          return SIGNED_ICONST_Q0;
+            else if (isNonZeroDigit(input))                 return SIGNED_ICONST_Q1;
             else if (input == '"')                          return LITERAL_STRING_Q0;
             else if (isLetter(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
+            else if (isWhitespace(input))                   return WHITESPACE_Q0;
             else                                            return NOT_ACCEPTED;
 
             // Variable types
@@ -235,19 +315,19 @@ public enum State {
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case VAR_TYPE_Q1_l:
             if (input == 'o')                               return VAR_TYPE_Q2_o;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case VAR_TYPE_Q2_o:
             if (input == 'a')                               return VAR_TYPE_Q4_n;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
 
         case VAR_TYPE_Q3_i:
             if (input == 'n')                               return VAR_TYPE_Q4_n;
@@ -255,71 +335,92 @@ public enum State {
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case VAR_TYPE_Q4_n:
             if (input == 't')                               return VAR_TYPE_Q11;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
 
         case VAR_TYPE_Q5_c:
             if (input == 'h')                               return VAR_TYPE_Q6_h;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case VAR_TYPE_Q6_h:
             if (input == 'a')                               return VAR_TYPE_Q7_a;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case VAR_TYPE_Q7_a:
             if (input == 'r')                               return VAR_TYPE_Q11;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
 
         case VAR_TYPE_Q8_b:
             if (input == 'o')                               return VAR_TYPE_Q9_o;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case VAR_TYPE_Q9_o:
             if (input == 'o')                               return VAR_TYPE_Q10_o;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case VAR_TYPE_Q10_o:
             if (input == 'l')                               return VAR_TYPE_Q11;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
-
+            else                                            return IDENTIFIER_F;
+        case VAR_TYPE_Q11:
+            if (isLetter(input)
+                    || isDigit(input)
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return VAR_TYPE_F;
+            
+            // Parentheses, braces, comma and semicolon 
+        case LPAREN_Q0:
+                                                            return LPAREN_F; 
+        case RPAREN_Q0:
+                                                            return RPAREN_F; 
+        case LBRACE_Q0:
+                                                            return LBRACE_F; 
+        case RBRACE_Q0:
+                                                            return RBRACE_F;
+        case COMMA_Q0:
+                                                            return COMMA_F;
+        case SEMI_Q0:
+                                                            return SEMI_F;
+            
             // Operators
         case ARITHMETIC_OP_Q0:
-            if (input == '0')                               return SIGNED_ICONST_Q0;
-            else if (isNonZeroDigit(input))                 return SIGNED_ICONST_Q2;
-            else                                            return NOT_ACCEPTED;
+                                                            return ARITHMETIC_OP_F;
+        case BITWISE_OP_Q0:
+                                                            return BITWISE_OP_F;
         case COMPARISON_OP_Q0:
             if (input == '=')                               return COMPARISON_OP_Q3;
             else                                            return NOT_ACCEPTED;
         case COMPARISON_OP_Q1:
             if (input == '=')                               return COMPARISON_OP_Q3;
             else if (input == '<')                          return BITWISE_OP_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return COMPARISON_OP_F;
         case COMPARISON_OP_Q2:
             if (input == '=')                               return COMPARISON_OP_Q3;
             else if (input == '>')                          return BITWISE_OP_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return COMPARISON_OP_F;
+        case COMPARISON_OP_Q3:
+                                                            return COMPARISON_OP_F;
         case ASSIGN_OP_Q0:
             if (input == '=')                               return COMPARISON_OP_Q3;
-            else                                            return NOT_ACCEPTED;
+            else                                            return ASSIGN_OP_F;
 
             // Statements
         case STATEMENT_Q0_e:
@@ -327,76 +428,81 @@ public enum State {
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case STATEMENT_Q1_l:
             if (input == 's')                               return STATEMENT_Q5_l;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
 
         case STATEMENT_Q2_w:
             if (input == 'h')                               return STATEMENT_Q3_h;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case STATEMENT_Q3_h:
             if (input == 'i')                               return STATEMENT_Q4_i;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case STATEMENT_Q4_i:
             if (input == 'l')                               return STATEMENT_Q5_l;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case STATEMENT_Q5_l:
             if (input == 'e')                               return STATEMENT_Q12;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
 
         case STATEMENT_Q6_r:
             if (input == 'e')                               return STATEMENT_Q7_e;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case STATEMENT_Q7_e:
             if (input == 't')                               return STATEMENT_Q8_t;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case STATEMENT_Q8_t:
             if (input == 'u')                               return STATEMENT_Q9_u;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case STATEMENT_Q9_u:
             if (input == 'r')                               return STATEMENT_Q10_r;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case STATEMENT_Q10_r:
             if (input == 'n')                               return STATEMENT_Q12;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
 
         case STATEMENT_Q11_o:
             if (input == 'r')                               return STATEMENT_Q12;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
+        case STATEMENT_Q12:
+            if (isLetter(input)
+                    || isDigit(input)
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return STATEMENT_F;
 
             // Boolean strings
         case BOOLEAN_STRING_Q0_t:
@@ -404,42 +510,44 @@ public enum State {
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case BOOLEAN_STRING_Q1_r:
             if (input == 'u')                               return BOOLEAN_STRING_Q2_u;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case BOOLEAN_STRING_Q2_u:
             if (input == 'e')                               return BOOLEAN_STRING_Q5;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case BOOLEAN_STRING_Q3_a:
             if (input == 'l')                               return BOOLEAN_STRING_Q4_l;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
         case BOOLEAN_STRING_Q4_l:
             if (input == 's')                               return BOOLEAN_STRING_Q2_u;
             else if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
+        case BOOLEAN_STRING_Q5:
+            if (isLetter(input)
+                    || isDigit(input)
+                    || (input == '_'))                      return IDENTIFIER_Q0;
+            else                                            return BOOLEAN_STRING_F;
 
         case SIGNED_ICONST_Q0:
             if (input == '.')                               return FCONST_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return SIGNED_ICONST_F;
         case SIGNED_ICONST_Q1:
             if (input == '.')                               return FCONST_Q0;
-            else                                            return NOT_ACCEPTED;
-        case SIGNED_ICONST_Q2:
-            if (input == '.')                               return FCONST_Q0;
-            else if (isDigit(input))                        return SIGNED_ICONST_Q2;
-            else                                            return NOT_ACCEPTED;
+            else if (isDigit(input))                        return SIGNED_ICONST_Q1;
+            else                                            return SIGNED_ICONST_F;
 
             // Constant numbers
         case FCONST_Q0:
@@ -452,22 +560,28 @@ public enum State {
         case FCONST_Q2:
             if (input == '0')                               return FCONST_Q1;
             else if (isNonZeroDigit(input))                 return FCONST_Q2;
-            else                                            return NOT_ACCEPTED;
+            else                                            return FCONST_F;
 
             // Literal string
         case LITERAL_STRING_Q0:
-            if (isDigit(input))                             return LITERAL_STRING_Q0;
-            else if (isLetter(input))                       return LITERAL_STRING_Q0;
-            else if (isWhitespace(input))                   return LITERAL_STRING_Q0;
+            if (isDigit(input)
+                    || isLetter(input)
+                    || isWhitespace(input))                 return LITERAL_STRING_Q0;
             else if (input == '"')                          return LITERAL_STRING_Q1;
             else                                            return NOT_ACCEPTED;
+        case LITERAL_STRING_Q1:
+                                                            return LITERAL_STRING_F;
             
             // Identifier
         case IDENTIFIER_Q0:
             if (isLetter(input)
                     || isDigit(input)
                     || (input == '_'))                      return IDENTIFIER_Q0;
-            else                                            return NOT_ACCEPTED;
+            else                                            return IDENTIFIER_F;
+            
+            // Whitespace
+        case WHITESPACE_Q0:
+                                                            return WHITESPACE_F;
             
             // Not accepted
         default:

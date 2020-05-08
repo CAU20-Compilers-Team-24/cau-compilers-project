@@ -15,6 +15,8 @@ import com.litsynp.lexer.token.SymbolTable;
 import com.litsynp.lexer.token.Token;
 import com.litsynp.lexer.token.TokenType;
 
+// TODO : Minus 기호 만나면 그냥 넣어버려라.. 구분 힘들다
+
 /**
  * Lexical analyzer that lexically analyzes an input file and creates a symbol
  * table
@@ -50,85 +52,31 @@ public class LexicalAnalyzer {
                 String workingString = "";
                 char ch = 0;
 
-                /*
-                 * String literal works like an exception to the delimiter rules, which is
-                 * splitting token for every delimiter, especially every whitespace.
-                 * 
-                 * The value of isStringLiteral becomes: * true if the lexer meets an opening
-                 * double quote("). * false if the lexer meets a closing double quote(").
-                 * 
-                 * This checks whether workingString is currently within two double quotes. The
-                 * default value is false.
-                 */
-                boolean isStringLiteral = false;
-
-                // If it is the last character of the line
-                boolean isLastCharacter = false;
-
                 // Read character by character in the line and transition the state
                 for (charCount = 0; charCount < line.length() + 1; charCount++) {
 
                     // Check if it is the last character
-                    isLastCharacter = (charCount == line.length());
-
-                    if (isLastCharacter == true) {
-                        // Mimic the last character of the line as whitespace for convenience
-                        ch = ' ';
-                    } else {
-                        // Get the next input character
-                        ch = line.charAt(charCount);
-                    }
+                    ch = (charCount == line.length()) ? ' ' : line.charAt(charCount);
 
                     System.out.println(String.format("[Line %3d] %3d", lineCount + 1, charCount)
                             + "th character|Read character:\'" + ch + "\'|Current String:" + workingString);
 
-                    if ((workingString.equals("") || workingString.equals(" ")) && State.isWhitespace(ch)) {
-                        // No interesting input received
-                        continue;
-                    }
-
                     // Transition
-                    if (isStringLiteral == false) { // Not within double quotes
-                        if (TokenType.isDelimiter(ch)) {
-                            // If the state can be accepted and the input is a delimiter
-                            System.out.println("Current workingString: \"" + workingString
-                                    + "\" and found a delimiter \"" + ch + "\"");
+                    currentState = currentState.transition(ch);
+                    
+                    // If accepted
+                    if (currentState.isAccepted()) {
+                        symtab.put(new Token(currentState.getTokenType(), workingString, lineCount));
 
-                            // Put the output token in the symbol table
-                            if (workingString.length() > 0) {
-                                symtab.put(new Token(currentState.getTokenType(), workingString));
-                            }
-                            symtab.put(new Token(TokenType.getDelimiterTokenType(ch), Character.toString(ch)));
-
-                            // Initialize for next input word
-                            workingString = "";
-                            currentState = State.START;
-                        } else if (ch == '"') { // Opening double quote
-                            workingString += ch;
-                            currentState = currentState.transition(line.charAt(charCount));
-                            isStringLiteral = true;
-
-                        } else {
-                            workingString += ch;
-                            currentState = currentState.transition(line.charAt(charCount));
-                        }
-                    } else { // Within double quotes
-                        if (isLastCharacter) {
-                            // Within double quotes but line is at the end
-                            currentState = State.NOT_ACCEPTED;
-                            symtab.put(new Token(currentState.getTokenType(), workingString));
-                        } else {
-                            workingString += ch;
-                            currentState = currentState.transition(line.charAt(charCount));
-                            
-                            if (ch == '"') { // Closing double quote
-                                isStringLiteral = false;
-                            }
-                        }
-
+                        currentState = State.START;
+                        workingString = Character.toString(ch);
+                        currentState = currentState.transition(ch);
+                    } else {
+                        // If not yet accepted
+                        workingString += ch;
                     }
                 }
-
+                
                 // Prepare for next line
                 lineCount = lineCount + 1;
             }
@@ -142,8 +90,8 @@ public class LexicalAnalyzer {
             System.out.println(e);
             System.exit(1);
         } catch (NullTokenException e) {
-            System.out.println(e + " at character " + charCount + " in line " + (lineCount + 1) + " in "
-                    + inputFile.getName());
+            System.out.println(
+                    e + " at character " + charCount + " in line " + (lineCount + 1) + " in " + inputFile.getName());
             System.exit(1);
         }
 

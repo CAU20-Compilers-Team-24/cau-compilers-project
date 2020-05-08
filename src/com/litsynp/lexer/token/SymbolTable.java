@@ -46,26 +46,41 @@ public class SymbolTable {
 
         // If not, put the token in the symbol table
         else {
-            if ((tokens.isEmpty() == false) && this.get(tokens.size() - 1).isNumberOrID()
-                    && token.isNegativeNumber()) {
-                System.out.println("Found a number or ID preceding a negative number token. Changing the current token value.");
-                addToken(new Token(TokenType.ARITHMETIC_OP, "-"));
-                token.setValue(token.getValue().substring(1));
-            }
+            boolean isThereNumberOrIDPrecedingPreviousMinusSymbolOnTheSameLine = ((tokens.size() >= 2)
+                    && (this.get(tokens.size() - 2).getLineNo() == token.getLineNo())
+                    && (this.get(tokens.size() - 2).isNumberOrID() == true));
 
-            addToken(token);
+            boolean isMinusSymbolJustBeforeOnTheSameLine = (tokens.size() >= 1)
+                    && (this.get(tokens.size() - 1).getLineNo() == token.getLineNo())
+                    && this.get(tokens.size() - 1).isMinusSymbol();
+            
+            boolean isTheCurrentTokenNonZeroNumber = (token.getName() == TokenType.FCONST
+                    || token.getName() == TokenType.SIGNED_ICONST) && (token.getValue().equals("0") == false);
+
+            if (isThereNumberOrIDPrecedingPreviousMinusSymbolOnTheSameLine == false
+                    && isMinusSymbolJustBeforeOnTheSameLine == true
+                    && isTheCurrentTokenNonZeroNumber == true) {
+                // If found a minus symbol preceding the current number token on the same line, 
+                // and the token preceding it is not a number or ID and is not on the same line,
+                // change the previous token instead
+                System.out.println("Found a minus symbol token preceding a number token. Changing the token value.");
+                this.get(tokens.size() - 1).setName(token.getName());
+                this.get(tokens.size() - 1).setValue(this.get(tokens.size() - 1).getValue() + token.getValue());
+            } else {
+                addToken(token);
+            }
             return;
         }
     }
-    
+
     /**
      * Adds a new token to the tokens array without considering any conditions.
      * 
      * @param token the new token to be added to the tokens array
      */
     private void addToken(Token token) {
-        System.out.println("Successively put {KEY=" + token.getName() + ":VALUE=" + token.getValue()
-        + "} into the symbol table.");
+        System.out.println(
+                "Successively put {KEY=" + token.getName() + ":VALUE=" + token.getValue() + "} into the symbol table.");
         tokens.add(token);
     }
 
@@ -80,9 +95,10 @@ public class SymbolTable {
         Token delToken = tokens.get(size - 1);
         TokenType delTokenName = delToken.getName();
         String delTokenValue = delToken.getValue();
+        int delTokenLineNo = delToken.getLineNo();
 
         tokens.remove(size - 1);
-        return new Token(delTokenName, delTokenValue); // return a clone of the deleted token
+        return new Token(delTokenName, delTokenValue, delTokenLineNo); // return a clone of the deleted token
     }
 
     /**

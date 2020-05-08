@@ -16,6 +16,11 @@ public class Token {
      * value of the token
      */
     private String value;
+    
+    /**
+     * line number of the token
+     */
+    private int lineNo;
 
     /**
      * Creates a new token
@@ -23,10 +28,12 @@ public class Token {
      * @param name  name for the new token, or token type, defined in
      *              {@link com.litsynp.lexer.token.TokenType}.
      * @param value value of the new token
+     * @param lineNo line number of the new token
      */
-    public Token(TokenType name, String value) {
+    public Token(TokenType name, String value, int lineNo) {
         this.name = name;
         this.value = value;
+        this.lineNo = lineNo;
     }
 
     /**
@@ -66,6 +73,15 @@ public class Token {
     }
 
     /**
+     * Returns the line number of the token.
+     * 
+     * @return line number of the token in integer
+     */
+    public int getLineNo() {
+        return lineNo;
+    }
+    
+    /**
      * Returns a boolean value of whether the token is a negative number.
      * <p>
      * "Number" means having a token type of either a signed integer constant
@@ -94,5 +110,18 @@ public class Token {
     public boolean isNumberOrID() {
         return (this.getName() == TokenType.SIGNED_ICONST || this.getName() == TokenType.FCONST
                 || this.getName() == TokenType.IDENTIFIER);
+    }
+    
+    /**
+     * Returns a boolean value of whether the token is a minus (-) symbol.
+     * 
+     * @return boolean value of whether the token is a minus symbol
+     */
+    public boolean isMinusSymbol() {
+        if ((this.getName() == TokenType.ARITHMETIC_OP) && (this.getValue().equals("-"))) {
+            return true;
+        }
+
+        return false;
     }
 }

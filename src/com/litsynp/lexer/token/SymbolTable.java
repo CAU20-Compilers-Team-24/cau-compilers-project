@@ -63,7 +63,7 @@ public class SymbolTable {
                 // If found a minus symbol preceding the current number token on the same line, 
                 // and the token preceding it is not a number or ID and is not on the same line,
                 // change the previous token instead
-                System.out.println("Found a minus symbol token preceding a number token. Changing the token value.");
+//                System.out.println("Found a minus symbol token preceding a number token. Changing the token value.");
                 this.get(tokens.size() - 1).setName(token.getName());
                 this.get(tokens.size() - 1).setValue(this.get(tokens.size() - 1).getValue() + token.getValue());
             } else {
@@ -79,8 +79,8 @@ public class SymbolTable {
      * @param token the new token to be added to the tokens array
      */
     private void addToken(Token token) {
-        System.out.println(
-                "Successively put {KEY=" + token.getName() + ":VALUE=" + token.getValue() + "} into the symbol table.");
+//        System.out.println(
+//                "Successively put {KEY=" + token.getName() + ":VALUE=" + token.getValue() + "} into the symbol table.");
         tokens.add(token);
     }
 
@@ -136,5 +136,14 @@ public class SymbolTable {
         }
 
         System.out.println("+------------------------------+------------------------------+");
+    }
+    
+    /***
+     * Returns a list of all tokens in the symbol table
+     * 
+     * @return a list of all tokens in the symbol table
+     */
+    public ArrayList<Token> getTokens() {
+    	return this.tokens;
     }
 }

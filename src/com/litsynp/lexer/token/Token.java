@@ -1,13 +1,20 @@
 package com.litsynp.lexer.token;
 
+import java.io.Serializable;
+
 /**
  * Class to contain information about a single token, to be put in a symbol
  * table instance.
  * <p>
  * Reference {@link com.litsynp.lexer.token.SymbolTable} for symbol table class.
  */
-public class Token {
+public class Token implements Serializable {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7623075468457151431L;
+
+	/**
      * name of the token, or token type
      */
     private TokenType name;

@@ -68,7 +68,7 @@ public class SyntaxAnalyzer {
 	 */
 	@SuppressWarnings("serial")
 	public SyntaxAnalyzer(File inputFile) {
-		System.out.println("Syntactically analyzer set on input file \"" + inputFile.getName() + "\"");
+		System.out.println("Syntax analyzer has been set on input file \"" + inputFile.getName() + "\".");
 
 		// Initialize the parsing table
 		parsingTable = new HashMap<State, HashMap<Symbol, String>>() {

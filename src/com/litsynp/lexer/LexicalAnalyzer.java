@@ -6,10 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.NotSerializableException;
 import java.io.ObjectOutputStream;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 
 import com.litsynp.lexer.state.State;
 import com.litsynp.lexer.token.NullTokenException;

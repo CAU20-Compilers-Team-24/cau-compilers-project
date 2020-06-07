@@ -43,8 +43,6 @@ public class LexicalAnalyzer {
 
 			// Read the input file line by line
 			while ((line = reader.readLine()) != null) {
-//				System.out.println(String.format("[Line %3d Content]", lineCount + 1) + line);
-
 				// Initialize variables for reading the line
 				State currentState = State.START;
 				String workingString = "";
@@ -55,9 +53,6 @@ public class LexicalAnalyzer {
 
 					// Check if it is the last character
 					ch = (charCount == line.length()) ? ' ' : line.charAt(charCount);
-
-//					System.out.println(String.format("[Line %3d] %3d", lineCount + 1, charCount)
-//							+ "th character|Read character:\'" + ch + "\'|Current String:" + workingString);
 
 					// Transition
 					currentState = currentState.transition(ch);
@@ -122,9 +117,10 @@ public class LexicalAnalyzer {
 
 			File outputFile = new File(inputFilePath + ".ser");
 
-			writeInstanceToFile(outputFile, symtab.getTokens()); // Writes ArrayList<Token> class information as .ser
-																	// file
-			System.out.println("Output file is generated in \"" + outputFile.getPath() + "\".");
+			// Write ArrayList<Token> class information as .ser file
+			writeInstanceToFile(outputFile, symtab.getTokens());
+
+			System.out.println("Output file is generated as \"" + outputFile.getPath() + "\".");
 		} catch (FileNotFoundException e) {
 			System.out.println(e);
 			System.exit(1);

@@ -10,7 +10,7 @@ public class Main {
     /**
      * Main method of the compiler program.
      * 
-     * @param args args[1] contains the input file path (default: "files/a.txt")
+     * @param args args[1] contains the input file path (default: "files/a.c")
      */
     public static void main(String[] args) {
         

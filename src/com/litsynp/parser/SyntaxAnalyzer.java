@@ -880,6 +880,7 @@ public class SyntaxAnalyzer {
 
 		AcceptCode acode;
 		try {
+			// Get the accept code to determine whether to continue parsing or not
 			acode = doAction();
 
 			System.out.println(inputSymbolsToString());
@@ -910,15 +911,14 @@ public class SyntaxAnalyzer {
 	private AcceptCode doAction() throws ReferenceException, NumberFormatException {
 		// Table entry with [State][Symbol]
 		Symbol nextSymbol = getNextSymbol();
-
 		String tableEntry = parsingTable.get(getCurrentState()).get(nextSymbol);
 
 		if (tableEntry == null) {
+			// There is no entry with the given state and symbol in the SLR parsing table
 			return AcceptCode.NOT_ACCEPTED;
 		} else if (tableEntry.charAt(0) == 'R') {
 			// Reduce by rule n in "Rn"
-			// 1. Pop |body| from the stack (possibly except epsilon),
-			// 2. GOTO(current stack top state, rule n head)
+			// 1. Pop |body| from the stack (possibly except epsilon)
 			int ruleNumber = Integer.parseInt(tableEntry.substring(1));
 			Rule rule = Rule.valueOf(ruleNumber);
 			int ruleBodyLength;
@@ -939,10 +939,11 @@ public class SyntaxAnalyzer {
 			splitterPosition++;
 
 			if (rule == Rule.rule1) {
-				// The rule is accepted
+				// If the input string is finally reduced to S', it is accepted
 				return AcceptCode.ACCEPTED;
 			}
 
+			// 2. GOTO(current stack top state, rule n head)
 			// Table entry at [State][Non-terminal], which is the next state
 			int gotoResult = Integer.parseInt(parsingTable.get(getCurrentState()).get(rule.head));
 			State nextState = State.valueOf(gotoResult);
@@ -996,7 +997,6 @@ public class SyntaxAnalyzer {
 	 * @return the next terminal symbol after the splitter in the input list
 	 */
 	private Symbol getNextSymbol() {
-		// return the next symbol
 		return inputSymbols.get(getLeftmostTerminalPositionOfRhs());
 	}
 

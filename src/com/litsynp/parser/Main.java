@@ -27,7 +27,7 @@ public class Main {
 
 		// Syntactically analyze the input file
 		SyntaxAnalyzer parser = new SyntaxAnalyzer(new File(fileName));
-		parser.parse();
+		boolean isAccepted = parser.parse();
 	}
 
 }

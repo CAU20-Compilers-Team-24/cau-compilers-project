@@ -868,8 +868,10 @@ public class SyntaxAnalyzer {
 	/***
 	 * Syntactically analyzes a given input file that contains results from lexical
 	 * analyzer.
+	 * 
+	 * @return boolean value of whether the string can be accepted by the parser
 	 */
-	public void parse() {
+	public boolean parse() {
 		System.out.println("Starting parsing...");
 
 		// Start parsing
@@ -887,15 +889,24 @@ public class SyntaxAnalyzer {
 			}
 
 			if (acode == AcceptCode.ACCEPTED) {
-				System.out.println("The input string has been accepted by the parser.");
+				// The input string is accepted
+				System.out.println("The input string is ACCEPTED by the parser.");
+
+				return true;
 			} else {
-				System.out.println("The input string has NOT been accepted by the parser.");
+				// Report error
+				System.out.println("The input string has NOT been accepted by the parser, at stack top \'"
+						+ getCurrentState() + "\' and next symbol \'" + getNextSymbol() + "\'.");
+
+				return false;
 			}
 		} catch (ReferenceException e) {
 			e.printStackTrace();
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
+		
+		return false;
 	}
 
 	/***

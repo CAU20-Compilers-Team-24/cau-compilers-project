@@ -33,9 +33,10 @@ public class LexicalAnalyzer {
 		int lineCount = 0;
 		int charCount = 0;
 
+		BufferedReader reader = null;
 		try {
 			// Create input stream
-			BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+			reader = new BufferedReader(new FileReader(inputFile));
 
 			// String of the one whole line
 			String line;
@@ -84,9 +85,6 @@ public class LexicalAnalyzer {
 				// Prepare for next line
 				lineCount = lineCount + 1;
 			}
-
-			reader.close();
-
 		} catch (FileNotFoundException e) {
 			System.out.println(e);
 			System.exit(1);
@@ -97,6 +95,15 @@ public class LexicalAnalyzer {
 			System.out.println(
 					e + " at character " + charCount + " in line " + (lineCount + 1) + " in " + inputFile.getName());
 			System.exit(1);
+		} finally {
+			// Close the reader
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		System.out.println("\nRead " + lineCount + " line(s) from the file \"" + inputFile.getPath() + "\".");
@@ -104,7 +111,8 @@ public class LexicalAnalyzer {
 		// Print information in symbol table
 		symtab.printTable();
 
-		// Print symbol table to a file
+		// Export the instance information of the token list in the symbol table as .ser
+		// file to read it in the parser
 		try {
 			String inputFilePath = inputFile.getPath();
 			int pos = inputFilePath.lastIndexOf(".");

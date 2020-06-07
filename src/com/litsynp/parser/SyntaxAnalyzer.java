@@ -872,9 +872,6 @@ public class SyntaxAnalyzer {
 	public void parse() {
 		System.out.println("Starting parsing...");
 
-		// Print all symbols in symbol list
-		System.out.println(inputSymbolsToString());
-
 		// Start parsing
 		stack.push(State.Q0);
 
@@ -883,10 +880,10 @@ public class SyntaxAnalyzer {
 			// Get the accept code to determine whether to continue parsing or not
 			acode = doAction();
 
-			System.out.println(inputSymbolsToString());
+			System.out.println("Input Symbols: " + inputSymbolsToString());
 			while (acode == AcceptCode.PARSING) {
 				acode = doAction();
-				System.out.println(inputSymbolsToString());
+				System.out.println("Input Symbols: " + inputSymbolsToString());
 			}
 
 			if (acode == AcceptCode.ACCEPTED) {
@@ -1006,7 +1003,7 @@ public class SyntaxAnalyzer {
 	 * @return string value of the input symbols
 	 */
 	private String inputSymbolsToString() {
-		String svalue = "Input Symbols: ";
+		String svalue = "";
 
 		for (int i = 0; i < inputSymbols.size(); i++) {
 			svalue += inputSymbols.get(i) + " ";

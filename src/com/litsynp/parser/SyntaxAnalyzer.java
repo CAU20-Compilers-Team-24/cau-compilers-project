@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Stack;
 
 import com.litsynp.lexer.token.Token;
+import com.litsynp.parser.exception.ReferenceException;
 import com.litsynp.parser.symbol.Symbol;
 import com.litsynp.parser.symbol.TokenMapper;
 
@@ -877,27 +878,36 @@ public class SyntaxAnalyzer {
 		// Start parsing
 		stack.push(State.Q0);
 
-		AcceptCode acode = doAction();
-		System.out.println(inputSymbolsToString());
-		while (acode == AcceptCode.PARSING) {
+		AcceptCode acode;
+		try {
 			acode = doAction();
+
 			System.out.println(inputSymbolsToString());
-		}
+			while (acode == AcceptCode.PARSING) {
+				acode = doAction();
+				System.out.println(inputSymbolsToString());
+			}
 
-		if (acode == AcceptCode.ACCEPTED) {
-			System.out.println("The input string has been accepted by the parser.");
-		} else {
-			System.out.println("The input string has NOT been accepted by the parser.");
+			if (acode == AcceptCode.ACCEPTED) {
+				System.out.println("The input string has been accepted by the parser.");
+			} else {
+				System.out.println("The input string has NOT been accepted by the parser.");
+			}
+		} catch (ReferenceException e) {
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
 		}
-
 	}
 
 	/***
 	 * Does parsing accordingly to the SLR parsing table.
 	 * 
 	 * @return boolean value of whether the table entry is null
+	 * @throws ReferenceException when the entry in the parsing table is invalidly
+	 *                            referenced
 	 */
-	private AcceptCode doAction() {
+	private AcceptCode doAction() throws ReferenceException, NumberFormatException {
 		// Table entry with [State][Symbol]
 		Symbol nextSymbol = getNextSymbol();
 
@@ -947,8 +957,8 @@ public class SyntaxAnalyzer {
 			shift();
 
 		} else {
-			System.out.println("Referencing Error while parsing table entry.");
-			System.exit(1);
+			throw new ReferenceException(
+					"ReferenceException at table [State:" + getCurrentState() + "][Symbol:" + getNextSymbol() + "]");
 		}
 
 		return AcceptCode.PARSING;
@@ -960,15 +970,6 @@ public class SyntaxAnalyzer {
 	private void shift() {
 		Collections.swap(inputSymbols, splitterPosition, splitterPosition + 1);
 		splitterPosition += 1;
-	}
-
-	/***
-	 * Reduces the LHS of the input symbol list using the given rule.
-	 * 
-	 * @param rule the rule to be used for reduction
-	 */
-	private void reduce(Rule rule) {
-
 	}
 
 	/***

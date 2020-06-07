@@ -105,7 +105,7 @@ public class LexicalAnalyzer {
 		System.out.println("\nRead " + lineCount + " line(s) from the file \"" + inputFile.getPath() + "\".");
 
 		// Print information in symbol table
-//		symtab.printTable();
+		symtab.printTable();
 
 		// Print symbol table to a file
 		try {
@@ -120,17 +120,6 @@ public class LexicalAnalyzer {
 			writeInstanceToFile(outputFile, symtab.getTokens()); // Writes ArrayList<Token> class information as .ser
 																	// file
 			System.out.println("Output file is generated in \"" + outputFile.getPath() + "\".");
-
-			/*
-			 * Print the symbol table to the output file and set the output stream back to
-			 * console standard output
-			 */
-			outputFile = new File(inputFilePath + ".out");
-			PrintStream stdout = System.out;
-			PrintStream out = new PrintStream(new FileOutputStream(outputFile), false, "UTF-8");
-			System.setOut(out);
-			symtab.printTable();
-			System.setOut(stdout);
 		} catch (FileNotFoundException e) {
 			System.out.println(e);
 			System.exit(1);

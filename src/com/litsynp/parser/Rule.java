@@ -3,6 +3,8 @@ package com.litsynp.parser;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.litsynp.parser.symbol.Symbol;
+
 /***
  * Defines the CFG production rules of the syntax analyzer.
  */

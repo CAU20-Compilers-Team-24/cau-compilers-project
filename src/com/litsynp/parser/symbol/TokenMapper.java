@@ -1,4 +1,4 @@
-package com.litsynp.parser;
+package com.litsynp.parser.symbol;
 
 import com.litsynp.lexer.token.Token;
 

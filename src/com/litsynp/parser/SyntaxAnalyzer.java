@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Stack;
 
 import com.litsynp.lexer.token.Token;
+import com.litsynp.parser.symbol.Symbol;
+import com.litsynp.parser.symbol.TokenMapper;
 
 public class SyntaxAnalyzer {
 

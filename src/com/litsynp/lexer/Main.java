@@ -1,9 +1,6 @@
-package com.litsynp;
+package com.litsynp.lexer;
 
 import java.io.File;
-
-import com.litsynp.lexer.LexicalAnalyzer;
-import com.litsynp.parser.SyntaxAnalyzer;
 
 /**
  * Main class of the compiler program.
@@ -30,10 +27,6 @@ public class Main {
 
         // Lexically analyze the input file
         LexicalAnalyzer.lex(new File(fileName));
-        
-        // Syntactically analyze the input file
-        SyntaxAnalyzer parser = new SyntaxAnalyzer(new File("files\\a.ser"));
-        parser.parse();
     }
 
 }

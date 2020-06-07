@@ -1,4 +1,4 @@
-package com.litsynp.parser;
+package com.litsynp.parser.symbol;
 
 /***
  * Defines terminals and non-terminals of the syntax analyzer.

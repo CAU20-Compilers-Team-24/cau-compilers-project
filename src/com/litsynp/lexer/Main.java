@@ -1,8 +1,6 @@
-package com.litsynp;
+package com.litsynp.lexer;
 
 import java.io.File;
-
-import com.litsynp.lexer.LexicalAnalyzer;
 
 /**
  * Main class of the compiler program.
@@ -12,7 +10,7 @@ public class Main {
     /**
      * Main method of the compiler program.
      * 
-     * @param args args[1] contains the input file path (default: "files/a.txt")
+     * @param args args[1] contains the input file path (default: "files/a.c")
      */
     public static void main(String[] args) {
         

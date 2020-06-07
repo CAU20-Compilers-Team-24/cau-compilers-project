@@ -6,8 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.io.ObjectOutputStream;
 
 import com.litsynp.lexer.state.State;
 import com.litsynp.lexer.token.NullTokenException;
@@ -15,125 +14,134 @@ import com.litsynp.lexer.token.SymbolTable;
 import com.litsynp.lexer.token.Token;
 import com.litsynp.lexer.token.TokenType;
 
-// TODO : Minus 기호 만나면 그냥 넣어버려라.. 구분 힘들다
-
 /**
  * Lexical analyzer that lexically analyzes an input file and creates a symbol
  * table
  */
 public class LexicalAnalyzer {
 
-    /**
-     * Lexically analyzes an input file line by line and character by character to
-     * tokenize it into a symbol table.
-     * 
-     * @param inputFile the input file to read
-     */
-    public static void lex(File inputFile) {
+	/**
+	 * Lexically analyzes an input file line by line and character by character to
+	 * tokenize it into a symbol table.
+	 * 
+	 * @param inputFile the input file to read
+	 */
+	public static void lex(File inputFile) {
 
-        // Symbol Table
-        SymbolTable symtab = new SymbolTable();
-        int lineCount = 0;
-        int charCount = 0;
+		// Symbol Table
+		SymbolTable symtab = new SymbolTable();
+		int lineCount = 0;
+		int charCount = 0;
 
-        try {
-            // Create input stream
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+		BufferedReader reader = null;
+		try {
+			// Create input stream
+			reader = new BufferedReader(new FileReader(inputFile));
 
-            // String of the one whole line
-            String line;
+			// String of the one whole line
+			String line;
 
-            // Read the input file line by line
-            while ((line = reader.readLine()) != null) {
-                System.out.println(String.format("[Line %3d Content]", lineCount + 1) + line);
+			// Read the input file line by line
+			while ((line = reader.readLine()) != null) {
+				// Initialize variables for reading the line
+				State currentState = State.START;
+				String workingString = "";
+				char ch = 0;
 
-                // Initialize variables for reading the line
-                State currentState = State.START;
-                String workingString = "";
-                char ch = 0;
+				// Read character by character in the line and transition the state
+				for (charCount = 0; charCount < line.length() + 1; charCount++) {
 
-                // Read character by character in the line and transition the state
-                for (charCount = 0; charCount < line.length() + 1; charCount++) {
+					// Check if it is the last character
+					ch = (charCount == line.length()) ? ' ' : line.charAt(charCount);
 
-                    // Check if it is the last character
-                    ch = (charCount == line.length()) ? ' ' : line.charAt(charCount);
+					// Transition
+					currentState = currentState.transition(ch);
 
-                    System.out.println(String.format("[Line %3d] %3d", lineCount + 1, charCount)
-                            + "th character|Read character:\'" + ch + "\'|Current String:" + workingString);
+					// If accepted
+					if (currentState.isAccepted()) {
+						symtab.put(new Token(currentState.getTokenType(), workingString, lineCount));
 
-                    // Transition
-                    currentState = currentState.transition(ch);
+						currentState = State.START;
+						workingString = Character.toString(ch);
+						currentState = currentState.transition(ch);
+					} else {
+						// If not yet accepted
+						workingString += ch;
+					}
+				}
 
-                    // If accepted
-                    if (currentState.isAccepted()) {
-                        symtab.put(new Token(currentState.getTokenType(), workingString, lineCount));
+				// Check if the token still has not been made at the end
+				if (workingString.length() > 0 && !workingString.equals(" ")
+						&& (currentState.getTokenType() == TokenType.NOT_YET_A_TOKEN
+								|| currentState.getTokenType() == TokenType.NOT_ACCEPTED)) {
+					throw new NullTokenException("Input \"" + workingString + "\" not accepted");
+				}
 
-                        currentState = State.START;
-                        workingString = Character.toString(ch);
-                        currentState = currentState.transition(ch);
-                    } else {
-                        // If not yet accepted
-                        workingString += ch;
-                    }
-                }
+				// Prepare for next line
+				lineCount = lineCount + 1;
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
+			System.exit(1);
+		} catch (IOException e) {
+			System.out.println(e);
+			System.exit(1);
+		} catch (NullTokenException e) {
+			System.out.println(
+					e + " at character " + charCount + " in line " + (lineCount + 1) + " in " + inputFile.getName());
+			System.exit(1);
+		} finally {
+			// Close the reader
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 
-                // Check if the token still has not been made at the end
-                if (workingString.length() > 0 && !workingString.equals(" ")
-                        && (currentState.getTokenType() == TokenType.NOT_YET_A_TOKEN
-                        || currentState.getTokenType() == TokenType.NOT_ACCEPTED)) {
-                    throw new NullTokenException("Input \"" + workingString + "\" not accepted");
-                }
+		System.out.println("\nRead " + lineCount + " line(s) from the file \"" + inputFile.getPath() + "\".");
 
-                // Prepare for next line
-                lineCount = lineCount + 1;
-            }
+		// Print information in symbol table
+		symtab.printTable();
 
-            reader.close();
+		// Export the instance information of the token list in the symbol table as .ser
+		// file to read it in the parser
+		try {
+			String inputFilePath = inputFile.getPath();
+			int pos = inputFilePath.lastIndexOf(".");
+			if (pos > 0 && pos < (inputFilePath.length() - 1)) { // If '.' is not the first or last character.
+				inputFilePath = inputFilePath.substring(0, pos);
+			}
 
-        } catch (FileNotFoundException e) {
-            System.out.println(e);
-            System.exit(1);
-        } catch (IOException e) {
-            System.out.println(e);
-            System.exit(1);
-        } catch (NullTokenException e) {
-            System.out.println(
-                    e + " at character " + charCount + " in line " + (lineCount + 1) + " in " + inputFile.getName());
-            System.exit(1);
-        }
+			File outputFile = new File(inputFilePath + ".ser");
 
-        System.out.println("\nRead " + lineCount + " line(s) from the file \"" + inputFile.getPath() + "\".");
+			// Write ArrayList<Token> class information as .ser file
+			writeInstanceToFile(outputFile, symtab.getTokens());
 
-        // Print information in symbol table
-        symtab.printTable();
+			System.out.println("Output file is generated as \"" + outputFile.getPath() + "\".");
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
+			System.exit(1);
+		} catch (IOException e) {
+			System.out.println(e);
+			System.exit(1);
+		}
+	}
 
-        // Print symbol table to a file
-        try {
-            String inputFilePath = inputFile.getPath();
-            int pos = inputFilePath.lastIndexOf(".");
-            if (pos > 0 && pos < (inputFilePath.length() - 1)) { // If '.' is not the first or last character.
-                inputFilePath = inputFilePath.substring(0, pos);
-            }
-
-            File outputFile = new File(inputFilePath + ".out");
-
-            /*
-             * Print the symbol table to the output file and set the output stream back to
-             * console standard output
-             */
-            PrintStream stdout = System.out;
-            PrintStream out = new PrintStream(new FileOutputStream(outputFile), false, "UTF-8");
-            System.setOut(out);
-            symtab.printTable();
-            System.setOut(stdout);
-
-            System.out.println("Output file is generated in \"" + outputFile.getPath() + "\".");
-        } catch (FileNotFoundException e) {
-            System.out.println(e);
-            System.exit(1);
-        } catch (UnsupportedEncodingException e) {
-            System.out.println(e);
-            System.exit(1);
-        }
-    }
+	/***
+	 * Saves class instance information as a file
+	 * 
+	 * @param file the file to save the instance information
+	 * @param obj  the object to save information
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
+	public static void writeInstanceToFile(File file, Object obj) throws FileNotFoundException, IOException {
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+		out.writeObject(obj);
+		out.flush();
+		out.close();
+	}
 }

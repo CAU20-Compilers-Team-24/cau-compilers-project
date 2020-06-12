@@ -16,7 +16,7 @@ public enum Rule {
 	rule5(5, Symbol.NTERM_VDECL, new Symbol[] { Symbol.TERM_VTYPE, Symbol.TERM_ID, Symbol.TERM_SEMI }),
 	rule6(6, Symbol.NTERM_VDECL, new Symbol[] { Symbol.TERM_VTYPE, Symbol.NTERM_ASSIGN, Symbol.TERM_SEMI }),
 	rule7(7, Symbol.NTERM_ASSIGN, new Symbol[] { Symbol.TERM_ID, Symbol.TERM_ASSIGN, Symbol.NTERM_RHS }),
-	rule8(8, Symbol.NTERM_VDECL,
+	rule8(8, Symbol.NTERM_FDECL,
 			new Symbol[] { Symbol.TERM_VTYPE, Symbol.TERM_ID, Symbol.TERM_LPAREN, Symbol.NTERM_ARG, Symbol.TERM_RPAREN,
 					Symbol.TERM_LBRACE, Symbol.NTERM_BLOCK, Symbol.NTERM_RETURN, Symbol.TERM_RBRACE }),
 	rule9(9, Symbol.NTERM_ARG, new Symbol[] { Symbol.TERM_VTYPE, Symbol.TERM_ID, Symbol.NTERM_MOREARGS }),

@@ -110,7 +110,7 @@ public class SyntaxAnalyzer {
                     {
                         put(Symbol.TERM_ID, "S7");
 
-                        put(Symbol.NTERM_CODE, "8");
+                        put(Symbol.NTERM_ASSIGN, "8");
                     }
                 });
 
@@ -957,7 +957,13 @@ public class SyntaxAnalyzer {
 
             // 2. GOTO(current stack top state, rule n head)
             // Table entry at [State][Non-terminal], which is the next state
-            int gotoResult = Integer.parseInt(parsingTable.get(getCurrentState()).get(rule.head));
+            String nextTableEntry = parsingTable.get(getCurrentState()).get(rule.head);
+            if (nextTableEntry == null) {
+                // Error in the table - throws NumberFormatException
+                return AcceptCode.NOT_ACCEPTED;
+            }
+            
+            int gotoResult = Integer.parseInt(nextTableEntry);
             State nextState = State.valueOf(gotoResult);
             stack.push(nextState);
 

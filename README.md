@@ -5,7 +5,7 @@
 - JRE 8+
 
 ## How to Modify Input C File
-- Create an input file containing contents to be lexically analyzed (ex. `input.c`)
+- Create an input file containing contents to be lexically and syntactically analyzed (ex. `input.c`)
 - Or, alternatively, just modify contents in `files/a.c`
 - Default input file is `files/a.c` if ran without any argument.
 

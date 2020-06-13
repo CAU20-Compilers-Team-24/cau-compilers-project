@@ -164,6 +164,7 @@ public class SyntaxAnalyzer {
                         put(Symbol.TERM_FOR, "R5");
                         put(Symbol.TERM_RETURN, "R5");
                         put(Symbol.TERM_RBRACE, "R5");
+                        put(Symbol.TERM_EOF, "R5");
                     }
                 });
 
@@ -191,6 +192,7 @@ public class SyntaxAnalyzer {
                         put(Symbol.TERM_FOR, "R6");
                         put(Symbol.TERM_RETURN, "R6");
                         put(Symbol.TERM_RBRACE, "R6");
+                        put(Symbol.TERM_EOF, "R6");
                     }
                 });
 

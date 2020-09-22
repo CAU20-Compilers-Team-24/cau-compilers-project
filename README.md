@@ -1,4 +1,4 @@
-# CAU 20-1 Compilers - Term Project: Lexical and Syntax Analyzer
+# CAU 20-1 Compilers - Term Project: Lexical and Syntax Analyzer for A Simplified C Language
 
 ## System Requirements
 - Tested on Windows 10 and Ubuntu 18.04 LTS

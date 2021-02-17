@@ -2,3 +2,6 @@
 
 # input and output files
 /files/*
+
+# IDE settings files
+.settings
